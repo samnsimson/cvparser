@@ -1,5 +1,2 @@
-export * from "./post"
-export * from "./account"
-export * from "./session"
-export * from "./user"
-export * from "./verificationtoken"
+export * from "./modelSchema";
+export * from "./inputTypeSchemas";
