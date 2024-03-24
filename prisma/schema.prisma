@@ -12,12 +12,13 @@ datasource db {
 }
 
 generator zod {
-    provider                 = "zod-prisma-types"
-    output                   = "../src/zod"
-    useMultipleFiles         = true // default is false
-    createPartialTypes       = true // default is false
-    writeNullishInModelTypes = true // default is false
-    createInputTypes         = false
+    provider                         = "zod-prisma-types"
+    output                           = "../src/zod"
+    useMultipleFiles                 = true // default is false
+    createPartialTypes               = true // default is false
+    writeNullishInModelTypes         = true // default is false
+    createInputTypes                 = false
+    createOptionalDefaultValuesTypes = true
 }
 
 model User {
@@ -29,9 +30,7 @@ model User {
     role          Role?    @default(USER)
     emailVerified Boolean? @default(false)
     phoneVerified Boolean? @default(false)
-    profile       Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
-    profileId     String?  @unique
-    clientId      String?
+    profile       Profile?
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 }
@@ -45,7 +44,8 @@ model Profile {
     state     String?
     country   String?
     zipCode   String?
-    user      User?
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

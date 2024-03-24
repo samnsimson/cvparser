@@ -85,7 +85,7 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
                     Sign up
                 </Button>
                 <div className="flex items-center justify-center">
-                    <Button variant="link" className="px-0">
+                    <Button variant="link" className="px-0" type="button">
                         <Link href="/sign-in">Already have an account?</Link>
                     </Button>
                 </div>

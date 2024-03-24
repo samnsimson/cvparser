@@ -8,7 +8,7 @@ interface AlertErrorProps extends HTMLAttributes<HTMLDivElement> {
 
 export const AlertError: FC<AlertErrorProps> = ({ error, ...props }) => {
     return (
-        <Alert variant="destructive" {...props}>
+        <Alert variant="destructive" className="space-x-3 rounded-none bg-red-50" {...props}>
             <InfoIcon />
             <AlertTitle>Something went wrong</AlertTitle>
             <AlertDescription>{error}</AlertDescription>

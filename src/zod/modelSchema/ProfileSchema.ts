@@ -1,30 +1,43 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /////////////////////////////////////////
 // PROFILE SCHEMA
 /////////////////////////////////////////
 
 export const ProfileSchema = z.object({
-    id: z.string().uuid(),
-    firstName: z.string(),
-    lastName: z.string().nullish(),
-    address: z.string().nullish(),
-    city: z.string().nullish(),
-    state: z.string().nullish(),
-    country: z.string().nullish(),
-    zipCode: z.string().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-});
+  id: z.string().uuid(),
+  firstName: z.string(),
+  lastName: z.string().nullish(),
+  address: z.string().nullish(),
+  city: z.string().nullish(),
+  state: z.string().nullish(),
+  country: z.string().nullish(),
+  zipCode: z.string().nullish(),
+  userId: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
 
-export type Profile = z.infer<typeof ProfileSchema>;
+export type Profile = z.infer<typeof ProfileSchema>
 
 /////////////////////////////////////////
 // PROFILE PARTIAL SCHEMA
 /////////////////////////////////////////
 
-export const ProfilePartialSchema = ProfileSchema.partial();
+export const ProfilePartialSchema = ProfileSchema.partial()
 
-export type ProfilePartial = z.infer<typeof ProfilePartialSchema>;
+export type ProfilePartial = z.infer<typeof ProfilePartialSchema>
+
+/////////////////////////////////////////
+// PROFILE OPTIONAL DEFAULTS SCHEMA
+/////////////////////////////////////////
+
+export const ProfileOptionalDefaultsSchema = ProfileSchema.merge(z.object({
+  id: z.string().uuid().optional(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+}))
+
+export type ProfileOptionalDefaults = z.infer<typeof ProfileOptionalDefaultsSchema>
 
 export default ProfileSchema;
