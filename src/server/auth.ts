@@ -1,8 +1,7 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { getServerSession, type DefaultSession, type NextAuthOptions } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
+import { env } from "@/env";
+import { api } from "@/trpc/server";
+import { DefaultSession, NextAuthOptions, getServerSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { db } from "@/server/db";
 
 declare module "next-auth" {
     interface Session extends DefaultSession {
@@ -13,20 +12,31 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
-    adapter: PrismaAdapter(db) as Adapter,
-    callbacks: {
-        session: ({ session, user }) => ({ ...session, user: { ...session.user, id: user.id } }),
-    },
+    secret: env.NEXTAUTH_SECRET,
+    session: { strategy: "jwt" },
     providers: [
         Credentials({
-            type: "credentials",
+            name: "credentials",
             credentials: { email: {}, password: {} },
             authorize: async (credentials) => {
-                if (!credentials) return null;
-                return null;
+                try {
+                    if (!credentials) return null;
+                    const user = await api.user.signin(credentials);
+                    return user;
+                } catch (error) {
+                    console.log("🚀 ~ authorize: ~ error:", error);
+                    return null;
+                }
             },
         }),
     ],
+    callbacks: {
+        jwt: ({ token, user }) => ({ ...token, ...user }),
+        session: ({ session, token }) => ({ ...session, user: { ...session.user, ...token } }),
+    },
+    pages: {
+        signIn: "/sign-in",
+    },
 };
 
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const getServerAuthSession = async () => getServerSession(authOptions);

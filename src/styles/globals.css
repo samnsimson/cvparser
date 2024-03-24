@@ -71,6 +71,16 @@
         @apply border-border;
     }
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground text-base;
     }
+}
+
+input:not([type="file" i], [type="image" i], [type="checkbox" i], [type="radio" i]) {
+    @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider;
+}
+
+button,
+button[type="submit"],
+button[type="button"] {
+    @apply min-h-12 min-w-12 rounded-none text-base tracking-wider font-semibold uppercase;
 }
