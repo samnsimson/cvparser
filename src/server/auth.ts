@@ -1,7 +1,9 @@
 import { env } from "@/env";
-import { api } from "@/trpc/server";
+import { compareSync } from "bcrypt";
+import { pick } from "lodash";
 import { DefaultSession, NextAuthOptions, getServerSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { db } from "./db";
 
 declare module "next-auth" {
     interface Session extends DefaultSession {
@@ -21,8 +23,11 @@ export const authOptions: NextAuthOptions = {
             authorize: async (credentials) => {
                 try {
                     if (!credentials) return null;
-                    const user = await api.user.signin(credentials);
-                    return user;
+                    const { email, password } = credentials;
+                    const user = await db.user.findFirstOrThrow({ where: { email } });
+                    const passwordMatch = compareSync(password, user.password);
+                    if (!passwordMatch) throw new Error("Wrong password");
+                    return pick(user, ["id", "email", "name", "role"]);
                 } catch (error) {
                     console.log("🚀 ~ authorize: ~ error:", error);
                     return null;
@@ -31,12 +36,12 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        jwt: ({ token, user }) => ({ ...token, ...user }),
-        session: ({ session, token }) => ({ ...session, user: { ...session.user, ...token } }),
+        jwt: async ({ token, user }) => ({ ...token, ...user }),
+        session: async ({ session, token }) => ({ ...session, user: { ...session.user, ...token } }),
     },
     pages: {
         signIn: "/sign-in",
     },
 };
 
-export const getServerAuthSession = async () => getServerSession(authOptions);
+export const getServerAuthSession = async () => await getServerSession(authOptions);

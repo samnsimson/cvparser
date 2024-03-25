@@ -14,11 +14,14 @@ datasource db {
 generator zod {
     provider                         = "zod-prisma-types"
     output                           = "../src/zod"
-    useMultipleFiles                 = true // default is false
-    createPartialTypes               = true // default is false
-    writeNullishInModelTypes         = true // default is false
+    useMultipleFiles                 = true
+    createPartialTypes               = true
+    writeNullishInModelTypes         = true
     createInputTypes                 = false
     createOptionalDefaultValuesTypes = true
+    createRelationValuesTypes        = true
+    addIncludeType                   = true
+    addSelectType                    = true
 }
 
 model User {
@@ -37,13 +40,13 @@ model User {
 
 model Profile {
     id        String   @id @default(uuid())
-    firstName String
-    lastName  String?
-    address   String?
-    city      String?
-    state     String?
-    country   String?
-    zipCode   String?
+    firstName String /// @zod.string.min(3, {message: "Value cannot be empty"})
+    lastName  String? /// @zod.string.min(3, {message: "Value cannot be empty"})
+    address   String? /// @zod.string.min(3, {message: "Value cannot be empty"})
+    city      String? /// @zod.string.min(3, {message: "Value cannot be empty"})
+    state     String? /// @zod.string.min(3, {message: "Value cannot be empty"})
+    country   String? /// @zod.string.min(3, {message: "Value cannot be empty"})
+    zipCode   String? /// @zod.string.min(3, {message: "Value cannot be empty"})
     user      User     @relation(fields: [userId], references: [id])
     userId    String   @unique
     createdAt DateTime @default(now())

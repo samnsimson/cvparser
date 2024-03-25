@@ -1,5 +1,11 @@
 import { z } from 'zod';
 import { RoleSchema } from '../inputTypeSchemas/RoleSchema'
+import type { ProfileWithRelations } from './ProfileSchema'
+import type { ProfilePartialWithRelations } from './ProfileSchema'
+import type { ProfileOptionalDefaultsWithRelations } from './ProfileSchema'
+import { ProfileWithRelationsSchema } from './ProfileSchema'
+import { ProfilePartialWithRelationsSchema } from './ProfileSchema'
+import { ProfileOptionalDefaultsWithRelationsSchema } from './ProfileSchema'
 
 /////////////////////////////////////////
 // USER SCHEMA
@@ -42,5 +48,59 @@ export const UserOptionalDefaultsSchema = UserSchema.merge(z.object({
 }))
 
 export type UserOptionalDefaults = z.infer<typeof UserOptionalDefaultsSchema>
+
+/////////////////////////////////////////
+// USER RELATION SCHEMA
+/////////////////////////////////////////
+
+export type UserRelations = {
+  profile?: ProfileWithRelations | null;
+};
+
+export type UserWithRelations = z.infer<typeof UserSchema> & UserRelations
+
+export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.merge(z.object({
+  profile: z.lazy(() => ProfileWithRelationsSchema).nullish(),
+}))
+
+/////////////////////////////////////////
+// USER OPTIONAL DEFAULTS RELATION SCHEMA
+/////////////////////////////////////////
+
+export type UserOptionalDefaultsRelations = {
+  profile?: ProfileOptionalDefaultsWithRelations | null;
+};
+
+export type UserOptionalDefaultsWithRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserOptionalDefaultsRelations
+
+export const UserOptionalDefaultsWithRelationsSchema: z.ZodType<UserOptionalDefaultsWithRelations> = UserOptionalDefaultsSchema.merge(z.object({
+  profile: z.lazy(() => ProfileOptionalDefaultsWithRelationsSchema).nullish(),
+}))
+
+/////////////////////////////////////////
+// USER PARTIAL RELATION SCHEMA
+/////////////////////////////////////////
+
+export type UserPartialRelations = {
+  profile?: ProfilePartialWithRelations | null;
+};
+
+export type UserPartialWithRelations = z.infer<typeof UserPartialSchema> & UserPartialRelations
+
+export const UserPartialWithRelationsSchema: z.ZodType<UserPartialWithRelations> = UserPartialSchema.merge(z.object({
+  profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
+})).partial()
+
+export type UserOptionalDefaultsWithPartialRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserPartialRelations
+
+export const UserOptionalDefaultsWithPartialRelationsSchema: z.ZodType<UserOptionalDefaultsWithPartialRelations> = UserOptionalDefaultsSchema.merge(z.object({
+  profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
+}).partial())
+
+export type UserWithPartialRelations = z.infer<typeof UserSchema> & UserPartialRelations
+
+export const UserWithPartialRelationsSchema: z.ZodType<UserWithPartialRelations> = UserSchema.merge(z.object({
+  profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
+}).partial())
 
 export default UserSchema;
