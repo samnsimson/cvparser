@@ -80,6 +80,10 @@
         @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider;
     }
 
+    input:disabled {
+        @apply bg-zinc-200;
+    }
+
     button,
     button[type="submit"],
     button[type="button"] {
