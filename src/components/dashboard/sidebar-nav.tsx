@@ -15,12 +15,12 @@ type LinkType = {
 const NavList: Array<LinkType> = [
     {
         name: "Home",
-        link: "/dashboard",
+        link: "/dashboard/",
         icon: <Home />,
     },
     {
         name: "Jobs",
-        link: "/jobs",
+        link: "/dashboard/jobs",
         icon: <BriefcaseBusiness />,
     },
 ];

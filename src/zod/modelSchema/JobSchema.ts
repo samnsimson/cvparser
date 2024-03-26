@@ -13,12 +13,12 @@ import { DepartmentOptionalDefaultsWithRelationsSchema } from './DepartmentSchem
 /////////////////////////////////////////
 
 export const JobSchema = z.object({
-  type: JobTypeSchema,
+  jobType: JobTypeSchema,
   shiftType: ShiftTypeSchema,
   id: z.string().uuid(),
-  title: z.string(),
+  title: z.string().min(1, {message: "Title cannot be empty"}),
   description: z.string().nullish(),
-  departmentId: z.string(),
+  departmentId: z.string().uuid({message:"Please select a department"}),
   location: z.string().nullish(),
   createdAt: z.coerce.date(),
   udpatedAt: z.coerce.date(),
@@ -39,7 +39,7 @@ export type JobPartial = z.infer<typeof JobPartialSchema>
 /////////////////////////////////////////
 
 export const JobOptionalDefaultsSchema = JobSchema.merge(z.object({
-  type: JobTypeSchema.optional(),
+  jobType: JobTypeSchema.optional(),
   shiftType: ShiftTypeSchema.optional(),
   id: z.string().uuid().optional(),
   createdAt: z.coerce.date().optional(),

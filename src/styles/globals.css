@@ -76,18 +76,27 @@
 }
 
 @layer components {
-    input:not([type="file" i], [type="image" i], [type="checkbox" i], [type="radio" i]) {
+    input:not([type="file"]),
+    input:not([type="image"]),
+    input:not([type="checkbox"]),
+    input:not([type="radio"]) {
         @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider;
+    }
+
+    textarea {
+        @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider !important;
     }
 
     input:disabled {
         @apply bg-zinc-200;
     }
 
-    button,
-    button[type="submit"],
-    button[type="button"] {
-        @apply min-h-12 min-w-12 rounded-none text-base tracking-wider uppercase;
+    button:not(:where([type="button"], [role="radio"])) {
+        @apply min-h-12 min-w-12 rounded-none text-base tracking-wider uppercase !important;
+    }
+
+    button:where([type="button"], [role="radio"]) {
+        @apply min-h-12 data-[state=on]:bg-neutral-800 data-[state=on]:text-white rounded-none border uppercase !important;
     }
 
     div[data-radix-popper-content-wrapper] {

@@ -55,11 +55,11 @@ model Profile {
 
 model Job {
     id           String     @id @default(uuid())
-    title        String
+    title        String /// @zod.string.min(1, {message: "Title cannot be empty"})
     description  String?
-    type         JobType?   @default(FULL_TIME)
+    jobType      JobType?   @default(FULL_TIME)
     department   Department @relation(fields: [departmentId], references: [id])
-    departmentId String
+    departmentId String /// @zod.string.uuid({message:"Please select a department"})
     location     String?
     shiftType    ShiftType? @default(DAY)
     createdAt    DateTime   @default(now())
