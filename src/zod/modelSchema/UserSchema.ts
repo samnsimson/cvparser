@@ -3,9 +3,21 @@ import { RoleSchema } from '../inputTypeSchemas/RoleSchema'
 import type { ProfileWithRelations } from './ProfileSchema'
 import type { ProfilePartialWithRelations } from './ProfileSchema'
 import type { ProfileOptionalDefaultsWithRelations } from './ProfileSchema'
+import type { JobWithRelations } from './JobSchema'
+import type { JobPartialWithRelations } from './JobSchema'
+import type { JobOptionalDefaultsWithRelations } from './JobSchema'
+import type { DepartmentWithRelations } from './DepartmentSchema'
+import type { DepartmentPartialWithRelations } from './DepartmentSchema'
+import type { DepartmentOptionalDefaultsWithRelations } from './DepartmentSchema'
 import { ProfileWithRelationsSchema } from './ProfileSchema'
 import { ProfilePartialWithRelationsSchema } from './ProfileSchema'
 import { ProfileOptionalDefaultsWithRelationsSchema } from './ProfileSchema'
+import { JobWithRelationsSchema } from './JobSchema'
+import { JobPartialWithRelationsSchema } from './JobSchema'
+import { JobOptionalDefaultsWithRelationsSchema } from './JobSchema'
+import { DepartmentWithRelationsSchema } from './DepartmentSchema'
+import { DepartmentPartialWithRelationsSchema } from './DepartmentSchema'
+import { DepartmentOptionalDefaultsWithRelationsSchema } from './DepartmentSchema'
 
 /////////////////////////////////////////
 // USER SCHEMA
@@ -55,12 +67,16 @@ export type UserOptionalDefaults = z.infer<typeof UserOptionalDefaultsSchema>
 
 export type UserRelations = {
   profile?: ProfileWithRelations | null;
+  Job: JobWithRelations[];
+  Department: DepartmentWithRelations[];
 };
 
 export type UserWithRelations = z.infer<typeof UserSchema> & UserRelations
 
 export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.merge(z.object({
   profile: z.lazy(() => ProfileWithRelationsSchema).nullish(),
+  Job: z.lazy(() => JobWithRelationsSchema).array(),
+  Department: z.lazy(() => DepartmentWithRelationsSchema).array(),
 }))
 
 /////////////////////////////////////////
@@ -69,12 +85,16 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.
 
 export type UserOptionalDefaultsRelations = {
   profile?: ProfileOptionalDefaultsWithRelations | null;
+  Job: JobOptionalDefaultsWithRelations[];
+  Department: DepartmentOptionalDefaultsWithRelations[];
 };
 
 export type UserOptionalDefaultsWithRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserOptionalDefaultsRelations
 
 export const UserOptionalDefaultsWithRelationsSchema: z.ZodType<UserOptionalDefaultsWithRelations> = UserOptionalDefaultsSchema.merge(z.object({
   profile: z.lazy(() => ProfileOptionalDefaultsWithRelationsSchema).nullish(),
+  Job: z.lazy(() => JobOptionalDefaultsWithRelationsSchema).array(),
+  Department: z.lazy(() => DepartmentOptionalDefaultsWithRelationsSchema).array(),
 }))
 
 /////////////////////////////////////////
@@ -83,24 +103,32 @@ export const UserOptionalDefaultsWithRelationsSchema: z.ZodType<UserOptionalDefa
 
 export type UserPartialRelations = {
   profile?: ProfilePartialWithRelations | null;
+  Job?: JobPartialWithRelations[];
+  Department?: DepartmentPartialWithRelations[];
 };
 
 export type UserPartialWithRelations = z.infer<typeof UserPartialSchema> & UserPartialRelations
 
 export const UserPartialWithRelationsSchema: z.ZodType<UserPartialWithRelations> = UserPartialSchema.merge(z.object({
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
+  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
 })).partial()
 
 export type UserOptionalDefaultsWithPartialRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserPartialRelations
 
 export const UserOptionalDefaultsWithPartialRelationsSchema: z.ZodType<UserOptionalDefaultsWithPartialRelations> = UserOptionalDefaultsSchema.merge(z.object({
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
+  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
 }).partial())
 
 export type UserWithPartialRelations = z.infer<typeof UserSchema> & UserPartialRelations
 
 export const UserWithPartialRelationsSchema: z.ZodType<UserWithPartialRelations> = UserSchema.merge(z.object({
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
+  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
 }).partial())
 
 export default UserSchema;

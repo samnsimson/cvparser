@@ -1,5 +1,4 @@
 "use client";
-import { JobOptionalDefaultsSchema } from "@/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
@@ -14,21 +13,38 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { api } from "@/trpc/react";
 import { capitalize } from "lodash";
 import { FolderTree } from "lucide-react";
+import { JobOptionalDefaultsSchema } from "@/zod";
+import { toast } from "sonner";
 
 interface JobFormProps extends HTMLAttributes<HTMLDivElement> {
     [x: string]: any;
 }
 
+const Schema = JobOptionalDefaultsSchema.omit({ createdById: true });
+type SchemaType = z.infer<typeof Schema>;
+
 export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
+    const jobMutation = api.job.createJob.useMutation();
     const { data: departments } = api.department.getDepartments.useQuery({});
-    const form = useForm<z.infer<typeof JobOptionalDefaultsSchema>>({
-        resolver: zodResolver(JobOptionalDefaultsSchema),
+    const form = useForm<SchemaType>({
+        resolver: zodResolver(Schema),
         defaultValues: { title: "", description: "", jobType: "FULL_TIME", shiftType: "DAY", departmentId: "", location: "" },
     });
+
+    const createJob = async (data: SchemaType) => {
+        await jobMutation.mutateAsync(data, {
+            onSuccess: () => {
+                form.reset();
+                toast.success("Job created", { description: "New job has been created successfully" });
+            },
+            onError: (error) => console.log(error),
+        });
+    };
+
     return (
         <div className={cn("p-6", className)} {...props}>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(() => null)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(createJob)} className="space-y-6">
                     <FormField
                         name="title"
                         control={form.control}
@@ -113,6 +129,9 @@ export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
                                         </ToggleGroupItem>
                                         <ToggleGroupItem className="w-full" value="FREELANCE">
                                             Freelance
+                                        </ToggleGroupItem>
+                                        <ToggleGroupItem className="w-full" value="Remote">
+                                            Remote
                                         </ToggleGroupItem>
                                     </ToggleGroup>
                                 </FormControl>

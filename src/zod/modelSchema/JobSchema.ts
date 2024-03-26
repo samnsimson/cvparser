@@ -4,9 +4,15 @@ import { ShiftTypeSchema } from '../inputTypeSchemas/ShiftTypeSchema'
 import type { DepartmentWithRelations } from './DepartmentSchema'
 import type { DepartmentPartialWithRelations } from './DepartmentSchema'
 import type { DepartmentOptionalDefaultsWithRelations } from './DepartmentSchema'
+import type { UserWithRelations } from './UserSchema'
+import type { UserPartialWithRelations } from './UserSchema'
+import type { UserOptionalDefaultsWithRelations } from './UserSchema'
 import { DepartmentWithRelationsSchema } from './DepartmentSchema'
 import { DepartmentPartialWithRelationsSchema } from './DepartmentSchema'
 import { DepartmentOptionalDefaultsWithRelationsSchema } from './DepartmentSchema'
+import { UserWithRelationsSchema } from './UserSchema'
+import { UserPartialWithRelationsSchema } from './UserSchema'
+import { UserOptionalDefaultsWithRelationsSchema } from './UserSchema'
 
 /////////////////////////////////////////
 // JOB SCHEMA
@@ -18,8 +24,9 @@ export const JobSchema = z.object({
   id: z.string().uuid(),
   title: z.string().min(1, {message: "Title cannot be empty"}),
   description: z.string().nullish(),
-  departmentId: z.string().uuid({message:"Please select a department"}),
+  departmentId: z.string().min(1, {message: "Department is required"}).uuid({message:"User ID is invalid"}),
   location: z.string().nullish(),
+  createdById: z.string().min(1, {message: "User is required"}).uuid({message:"User ID is invalid"}),
   createdAt: z.coerce.date(),
   udpatedAt: z.coerce.date(),
 })
@@ -54,12 +61,14 @@ export type JobOptionalDefaults = z.infer<typeof JobOptionalDefaultsSchema>
 
 export type JobRelations = {
   department: DepartmentWithRelations;
+  createdBy: UserWithRelations;
 };
 
 export type JobWithRelations = z.infer<typeof JobSchema> & JobRelations
 
 export const JobWithRelationsSchema: z.ZodType<JobWithRelations> = JobSchema.merge(z.object({
   department: z.lazy(() => DepartmentWithRelationsSchema),
+  createdBy: z.lazy(() => UserWithRelationsSchema),
 }))
 
 /////////////////////////////////////////
@@ -68,12 +77,14 @@ export const JobWithRelationsSchema: z.ZodType<JobWithRelations> = JobSchema.mer
 
 export type JobOptionalDefaultsRelations = {
   department: DepartmentOptionalDefaultsWithRelations;
+  createdBy: UserOptionalDefaultsWithRelations;
 };
 
 export type JobOptionalDefaultsWithRelations = z.infer<typeof JobOptionalDefaultsSchema> & JobOptionalDefaultsRelations
 
 export const JobOptionalDefaultsWithRelationsSchema: z.ZodType<JobOptionalDefaultsWithRelations> = JobOptionalDefaultsSchema.merge(z.object({
   department: z.lazy(() => DepartmentOptionalDefaultsWithRelationsSchema),
+  createdBy: z.lazy(() => UserOptionalDefaultsWithRelationsSchema),
 }))
 
 /////////////////////////////////////////
@@ -82,24 +93,28 @@ export const JobOptionalDefaultsWithRelationsSchema: z.ZodType<JobOptionalDefaul
 
 export type JobPartialRelations = {
   department?: DepartmentPartialWithRelations;
+  createdBy?: UserPartialWithRelations;
 };
 
 export type JobPartialWithRelations = z.infer<typeof JobPartialSchema> & JobPartialRelations
 
 export const JobPartialWithRelationsSchema: z.ZodType<JobPartialWithRelations> = JobPartialSchema.merge(z.object({
   department: z.lazy(() => DepartmentPartialWithRelationsSchema),
+  createdBy: z.lazy(() => UserPartialWithRelationsSchema),
 })).partial()
 
 export type JobOptionalDefaultsWithPartialRelations = z.infer<typeof JobOptionalDefaultsSchema> & JobPartialRelations
 
 export const JobOptionalDefaultsWithPartialRelationsSchema: z.ZodType<JobOptionalDefaultsWithPartialRelations> = JobOptionalDefaultsSchema.merge(z.object({
   department: z.lazy(() => DepartmentPartialWithRelationsSchema),
+  createdBy: z.lazy(() => UserPartialWithRelationsSchema),
 }).partial())
 
 export type JobWithPartialRelations = z.infer<typeof JobSchema> & JobPartialRelations
 
 export const JobWithPartialRelationsSchema: z.ZodType<JobWithPartialRelations> = JobSchema.merge(z.object({
   department: z.lazy(() => DepartmentPartialWithRelationsSchema),
+  createdBy: z.lazy(() => UserPartialWithRelationsSchema),
 }).partial())
 
 export default JobSchema;
