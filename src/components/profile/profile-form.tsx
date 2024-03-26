@@ -14,6 +14,7 @@ import { defaultFormValues } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 import { Skeleton } from "../ui/skeleton";
+import { toast } from "sonner";
 
 const defaultValueKeys = ["firstName", "lastName", "address", "city", "state", "country", "zipCode", "name", "email", "phone"] as const;
 type ProfileProps = (Profile & { user: Partial<User> | null }) | null;
@@ -50,13 +51,20 @@ const LoadingState: FC = () => {
 
 export const ProfileForm: FC = ({}) => {
     const getProfile = api.profile.getProfile.useQuery();
-    const mutation = api.profile.createProfile.useMutation();
+    const mutation = api.profile.updateProfile.useMutation();
     const { data: profile, isLoading, isFetched } = getProfile;
     const { data: session } = useSession();
     const form = useForm<FormData>({ resolver: zodResolver(ProfilePartialSchema), defaultValues: defaultFormValues([...defaultValueKeys]) });
     const { isSubmitting, isValid } = form.formState;
 
-    const onSubmit = async (data: FormData) => mutation.mutate(data, { onSuccess: () => getProfile.refetch(), onError: console.log });
+    const onSubmit = async (data: FormData) =>
+        await mutation.mutateAsync(data, {
+            onSuccess: async () => {
+                await getProfile.refetch();
+                toast.success("Success", { description: "Profile updated successfully!" });
+            },
+            onError: () => toast.error("Oops! Something went wrong", { description: "Error updating your profile" }),
+        });
 
     useEffect(() => {
         if (isFetched) {

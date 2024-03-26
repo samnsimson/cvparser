@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/react";
 import { getServerAuthSession } from "@/server/auth";
 import AuthProvider from "./providers/session-provider";
+import { Toaster } from "sonner";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -23,6 +24,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <AuthProvider session={session}>
                     <TRPCReactProvider>{children}</TRPCReactProvider>
                 </AuthProvider>
+                <Toaster
+                    richColors
+                    expand
+                    toastOptions={{
+                        classNames: {
+                            toast: "rounded-none shadow",
+                            title: "text-base tracking-wide",
+                            description: "text-base tracking-wide",
+                        },
+                    }}
+                />
             </body>
         </html>
     );
