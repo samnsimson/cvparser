@@ -1,20 +1,98 @@
-import { FC, HTMLAttributes } from "react";
-import { Notification } from "./notification";
-import { SettingsSection } from "./settings";
-import { Profile } from "./profile";
-import { SignOut } from "./signout";
+"use client";
+import { FC, ReactNode } from "react";
+import { BellIcon, LogOut, SettingsIcon, User } from "lucide-react";
+import { Menubar, MenubarContent, MenubarGroup, MenubarItem, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
+import { signOut } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-interface HeaderAccountsSectionProps extends HTMLAttributes<HTMLDivElement> {
-    [x: string]: unknown;
+interface HeaderAccountsSectionProps {
+    [x: string]: any;
 }
+
+type DropDownType = {
+    name: string;
+    icon: ReactNode;
+    link?: string;
+    action?: () => void;
+    menu?: Array<{
+        label: string;
+        item: Array<{
+            name: string;
+            icon: ReactNode;
+            variant?: "destructive" | "default";
+            link?: string;
+            action?: () => void | any;
+        }>;
+    }>;
+};
+
+const NavLinks: Array<DropDownType> = [
+    { name: "Notification", icon: <BellIcon /> },
+    { name: "Settings", icon: <SettingsIcon /> },
+    {
+        name: "Profile",
+        icon: <User />,
+        menu: [
+            {
+                label: "Profile",
+                item: [{ name: "Profile", link: "/dashboard/profile", icon: <User /> }],
+            },
+            {
+                label: "Auth",
+                item: [
+                    {
+                        name: "Logout",
+                        variant: "destructive",
+                        action: async () => await signOut({ redirect: true, callbackUrl: "/sign-in" }),
+                        icon: <LogOut />,
+                    },
+                ],
+            },
+        ],
+    },
+];
+
+const MenuBarItem: FC<{ icon: ReactNode; name: string; variant?: string; action?: () => any }> = ({ icon, name, variant, action }) => {
+    return (
+        <MenubarItem
+            onClick={() => (action ? action() : null)}
+            className={cn("rounded-none space-x-3 cursor-pointer group text-gray-600 hover:text-gray-800", {
+                "text-red-600": variant === "destructive",
+            })}
+        >
+            {icon} <span className="group-hover:text-gray-800 text-base">{name}</span>
+        </MenubarItem>
+    );
+};
 
 export const HeaderAccountsSection: FC<HeaderAccountsSectionProps> = ({ ...props }) => {
     return (
-        <div {...props} className="flex items-center space-x-4">
-            <Notification />
-            <SettingsSection />
-            <SignOut />
-            <Profile image="" />
-        </div>
+        <Menubar className="h-full rounded-none border-none py-0 space-x-0" {...props}>
+            {NavLinks.map((list, key) => (
+                <MenubarMenu key={key}>
+                    <MenubarTrigger className="h-full cursor-pointer flex items-center justify-center px-4 rounded-none ring-0 focus-visible:outline-none data-[state=open]:bg-neutral-200 border-l">
+                        {list.icon}
+                    </MenubarTrigger>
+                    {list.menu && list.menu.length > 0 && (
+                        <MenubarContent className="rounded-none -top-[3px] p-0">
+                            {list.menu.map((menu, key) => (
+                                <MenubarGroup key={key} className="border-b last:border-b-0 p-2">
+                                    {menu.item.map((item, key) =>
+                                        item.link ? (
+                                            <Link key={key} href={item.link}>
+                                                <MenuBarItem {...item} />
+                                            </Link>
+                                        ) : (
+                                            <MenuBarItem key={key} {...item} />
+                                        ),
+                                    )}
+                                </MenubarGroup>
+                            ))}
+                        </MenubarContent>
+                    )}
+                </MenubarMenu>
+            ))}
+        </Menubar>
     );
 };

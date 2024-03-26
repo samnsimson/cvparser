@@ -89,4 +89,8 @@
     button[type="button"] {
         @apply min-h-12 min-w-12 rounded-none text-base tracking-wider uppercase;
     }
+
+    div[data-radix-popper-content-wrapper] {
+        @apply -top-[7px] !important;
+    }
 }

@@ -1,22 +1,27 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { ProfileOptionalDefaultsWithPartialRelationsSchema } from "@/zod";
+import { ProfilePartialSchema } from "@/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { api } from "@/trpc/react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Profile, User } from "@prisma/client";
 import { defaultFormValues } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { Skeleton } from "../ui/skeleton";
 
 const defaultValueKeys = ["firstName", "lastName", "address", "city", "state", "country", "zipCode", "name", "email", "phone"] as const;
-type ProfileProps = { profile: (Profile & { user: Partial<User> | null }) | null };
+type ProfileProps = (Profile & { user: Partial<User> | null }) | null;
 type FormData = { [K in (typeof defaultValueKeys)[number]]: string };
 
-const buildDefaultValues = (profile: ProfileProps["profile"]) => {
+const buildDefaultValues = (profile: ProfileProps | null | undefined, session: Session | null) => {
     const requiredKeys: string[] = [...defaultValueKeys];
-    if (!profile) return defaultFormValues(requiredKeys);
+    if (!profile) return { ...defaultFormValues(requiredKeys), ...(session && { name: session.user.name, email: session.user.email }) };
     const { user, ...rest } = profile;
     const combinedObj: Record<string, any> = { ...rest, ...(user && user) };
     return requiredKeys.reduce((acc: Record<string, any>, curr) => {
@@ -25,23 +30,53 @@ const buildDefaultValues = (profile: ProfileProps["profile"]) => {
     }, {});
 };
 
-const ProfileForm: FC<ProfileProps> = ({ profile }) => {
-    const defaultValues = buildDefaultValues(profile);
+const LoadingState: FC = () => {
+    return (
+        <div className="grid gric-cols-2 gap-6">
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-2" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-2" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
+            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-2" />
+        </div>
+    );
+};
+
+export const ProfileForm: FC = ({}) => {
+    const getProfile = api.profile.getProfile.useQuery();
     const mutation = api.profile.createProfile.useMutation();
-    const form = useForm<FormData>({ resolver: zodResolver(ProfileOptionalDefaultsWithPartialRelationsSchema), defaultValues });
-    const onSubmit = async (data: FormData) => mutation.mutate(data, { onSuccess: () => form.reset(), onError: console.log });
-    const { isSubmitting } = form.formState;
+    const { data: profile, isLoading, isFetched } = getProfile;
+    const { data: session } = useSession();
+    const form = useForm<FormData>({ resolver: zodResolver(ProfilePartialSchema), defaultValues: defaultFormValues([...defaultValueKeys]) });
+    const { isSubmitting, isValid } = form.formState;
+
+    const onSubmit = async (data: FormData) => mutation.mutate(data, { onSuccess: () => getProfile.refetch(), onError: console.log });
+
+    useEffect(() => {
+        if (isFetched) {
+            const defaultValues = buildDefaultValues(profile, session);
+            form.reset(defaultValues);
+        }
+    }, [profile, session, isFetched]);
+
+    if (isLoading) return <LoadingState />;
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-6">
                 <FormField
                     name="name"
-                    control={form.control}
+                    disabled
                     render={({ field }) => (
                         <FormItem className="col-span-2">
                             <FormControl>
-                                <Input type="text" placeholder="Name" {...field} disabled />
+                                <Input type="text" placeholder="Name" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -49,11 +84,11 @@ const ProfileForm: FC<ProfileProps> = ({ profile }) => {
                 />
                 <FormField
                     name="email"
-                    control={form.control}
+                    disabled
                     render={({ field }) => (
                         <FormItem className="col-span-1">
                             <FormControl>
-                                <Input type="text" placeholder="Email" {...field} disabled />
+                                <Input type="text" placeholder="Email" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -61,11 +96,11 @@ const ProfileForm: FC<ProfileProps> = ({ profile }) => {
                 />
                 <FormField
                     name="phone"
-                    control={form.control}
+                    disabled
                     render={({ field }) => (
                         <FormItem className="col-span-1">
                             <FormControl>
-                                <Input type="text" placeholder="Phone" {...field} disabled />
+                                <Input type="text" placeholder="Phone" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -155,11 +190,10 @@ const ProfileForm: FC<ProfileProps> = ({ profile }) => {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full col-span-2" disabled={isSubmitting}>
+                <Button type="submit" className="w-full col-span-2" disabled={isSubmitting || !isValid}>
                     UPDATE PROFILE
                 </Button>
             </form>
         </Form>
     );
 };
-export default ProfileForm;

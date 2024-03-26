@@ -1,3 +1,4 @@
+import { SidebarNav } from "@/components/dashboard";
 import { HeaderAccountsSection } from "@/components/header-account-section";
 import { getServerAuthSession } from "@/server/auth";
 import { redirect } from "next/navigation";
@@ -16,7 +17,9 @@ const layout: FC<{ children: ReactNode }> = async ({ children }) => {
                 <HeaderAccountsSection />
             </div>
             <div className="flex h-full">
-                <div className="w-[90px] border-r"></div>
+                <div className="w-[90px] border-r">
+                    <SidebarNav />
+                </div>
                 <div className="flex-1">{children}</div>
             </div>
         </div>
