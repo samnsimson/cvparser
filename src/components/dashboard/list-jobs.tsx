@@ -17,9 +17,9 @@ const LoadingSkeleton: FC = () => {
 export const ListJobs: FC<ListJobProps> = ({ ...props }) => {
     const params = useSearchParams();
     const jobId = params.get("jobid");
-    const { data: jobs, isFetching } = api.job.getJobs.useQuery();
+    const { data: jobs, isFetching, isRefetching } = api.job.getJobs.useQuery();
 
-    if (isFetching) return <LoadingSkeleton />;
+    if (isFetching && !isRefetching) return <LoadingSkeleton />;
 
     return (
         <div {...props}>
