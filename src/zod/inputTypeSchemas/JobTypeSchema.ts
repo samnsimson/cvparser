@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const JobTypeSchema = z.enum(['FULL_TIME','PART_TIME','FREELANCE','REMOTE']);
+export const JobTypeSchema = z.enum(['FULL_TIME','PART_TIME','HYBRID','REMOTE']);
 
 export type JobTypeType = `${z.infer<typeof JobTypeSchema>}`
 

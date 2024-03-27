@@ -127,10 +127,10 @@ export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
                                         <ToggleGroupItem className="w-full" value="PART_TIME">
                                             Part Time
                                         </ToggleGroupItem>
-                                        <ToggleGroupItem className="w-full" value="FREELANCE">
-                                            Freelance
+                                        <ToggleGroupItem className="w-full" value="HYBRID">
+                                            Hybrid
                                         </ToggleGroupItem>
-                                        <ToggleGroupItem className="w-full" value="Remote">
+                                        <ToggleGroupItem className="w-full" value="REMOTE">
                                             Remote
                                         </ToggleGroupItem>
                                     </ToggleGroup>

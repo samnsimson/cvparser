@@ -1,4 +1,4 @@
-import { JobForm } from "@/components/job";
+import { JobForm, ListJobs } from "@/components/job";
 import { Title } from "@/components/section";
 
 const JobsPage = () => {
@@ -6,6 +6,7 @@ const JobsPage = () => {
         <div className="grid grid-cols-6 h-full">
             <div className="col-span-4 border-r">
                 <Title text="Jobs" />
+                <ListJobs />
             </div>
             <div className="col-span-2">
                 <Title text="Create New Job" />
