@@ -18,7 +18,7 @@ import { JobsAndResumesOptionalDefaultsWithRelationsSchema } from './JobsAndResu
 
 export const ResumeSchema = z.object({
   id: z.string().uuid(),
-  key: z.string().uuid({message:"Key is invalid"}),
+  fileKey: z.string().uuid({message:"Key is invalid"}),
   path: z.string().nullish(),
   fullPath: z.string().nullish(),
   url: z.string().url({message:"URL is invalid"}),

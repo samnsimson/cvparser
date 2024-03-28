@@ -146,7 +146,7 @@ model ShortListed {
 
 model Resume {
     id          String           @id @default(uuid())
-    key         String           @unique /// @zod.string.uuid({message:"Key is invalid"})
+    fileKey     String /// @zod.string.uuid({message:"Key is invalid"})
     path        String? /// @zod.string
     fullPath    String? /// @zod.string
     url         String /// @zod.string.url({message:"URL is invalid"})
@@ -158,13 +158,11 @@ model Resume {
 }
 
 model JobsAndResumes {
-    id       String @id @default(uuid())
     job      Job    @relation(fields: [jobId], references: [id])
     resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
     jobId    String
     resumeId String
 
-    @@unique([id])
     @@unique([jobId, resumeId])
 }
 

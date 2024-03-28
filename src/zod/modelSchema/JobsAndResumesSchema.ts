@@ -17,7 +17,6 @@ import { ResumeOptionalDefaultsWithRelationsSchema } from './ResumeSchema'
 /////////////////////////////////////////
 
 export const JobsAndResumesSchema = z.object({
-  id: z.string().uuid(),
   jobId: z.string(),
   resumeId: z.string(),
 })
@@ -37,7 +36,6 @@ export type JobsAndResumesPartial = z.infer<typeof JobsAndResumesPartialSchema>
 /////////////////////////////////////////
 
 export const JobsAndResumesOptionalDefaultsSchema = JobsAndResumesSchema.merge(z.object({
-  id: z.string().uuid().optional(),
 }))
 
 export type JobsAndResumesOptionalDefaults = z.infer<typeof JobsAndResumesOptionalDefaultsSchema>

@@ -50,8 +50,8 @@ export const UploadForm: FC<UploadFormProps> = ({ ...props }) => {
         try {
             const { data, error } = await supabase.storage.from(NEXT_PUBLIC_RESUME_BUCKET).upload(filePath, resume);
             if (error) throw error;
-            const { id: key, path, fullPath } = data as unknown as { id: string; path: string; fullPath: string };
-            await resumeMutation.mutateAsync({ data: { key, path, fullPath, url: `${NEXT_PUBLIC_SUPABASE_URL}/${fullPath}` }, jobId });
+            const { id: fileKey, path, fullPath } = data as unknown as { id: string; path: string; fullPath: string };
+            await resumeMutation.mutateAsync({ data: { fileKey, path, fullPath, url: `${NEXT_PUBLIC_SUPABASE_URL}/${fullPath}` }, jobId });
             toast.success("Success!", { description: "Resume uploaded successfully" });
         } catch (error) {
             console.log("🚀 ~ upload ~ error:", error);
