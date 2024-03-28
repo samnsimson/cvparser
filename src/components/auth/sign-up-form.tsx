@@ -1,5 +1,4 @@
 "use client";
-import { UserSchema } from "@/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, HTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
@@ -9,12 +8,25 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { api } from "@/trpc/react";
+import { toast } from "sonner";
+import { omit } from "lodash";
+import { Label } from "../form";
+import { LoaderIcon } from "lucide-react";
 
 interface SignUpFormProps extends HTMLAttributes<HTMLDivElement> {
     [x: string]: unknown;
 }
 
-const SignUpSchema = UserSchema.pick({ name: true, email: true, phone: true, password: true });
+const minPassErr = "Password must have at least 6 characters";
+const maxPassErr = "Password can have atmost 16 characters";
+const SignUpSchemaBase = z.object({
+    name: z.string().regex(new RegExp(/^[a-zA-Z0-9_-]{3,16}$/), { message: 'Invalid username format. Only letters, numbers, "-" and "_" is allowed.' }),
+    email: z.string().email({ message: "Email is invalid" }),
+    phone: z.string().regex(new RegExp(/^\+?[1-9]\d{9,14}$/), { message: "Phone number is invalid" }),
+    password: z.string({ required_error: "Password is required" }).min(6, { message: minPassErr }).max(16, { message: maxPassErr }),
+    confirm: z.string({ required_error: "Confirm Password is required" }),
+});
+const SignUpSchema = SignUpSchemaBase.refine((data) => data.confirm === data.password, { message: "Password does not match", path: ["confirm"] });
 type SingUpType = z.infer<typeof SignUpSchema>;
 
 export const SignUpForm: FC<SignUpFormProps> = ({}) => {
@@ -22,12 +34,12 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
     const user = api.user.signup.useMutation();
 
     const onSubmit = async (data: SingUpType) => {
-        user.mutate(data, {
-            onSuccess: (data) => {
-                console.log("CREATED DATA", data);
-                form.reset();
-            },
-        });
+        try {
+            await user.mutateAsync(omit(data, ["confirm"]));
+            form.reset();
+        } catch (error) {
+            toast.error("Error! Something went wrong", { description: "Unable to create an account!" });
+        }
     };
 
     return (
@@ -38,8 +50,9 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
+                            <Label text="Username" />
                             <FormControl>
-                                <Input type="text" placeholder="Your name" {...field} />
+                                <Input type="text" placeholder="Eg: username" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -50,8 +63,9 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
+                            <Label text="Email" />
                             <FormControl>
-                                <Input type="email" placeholder="Your email" {...field} />
+                                <Input type="email" placeholder="Eg: someone@example.com" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -62,8 +76,9 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
+                            <Label text="Phone" />
                             <FormControl>
-                                <Input type="tel" placeholder="Your phone" {...field} />
+                                <Input type="tel" placeholder="Eg: 1231231230" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -74,18 +89,32 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
                     control={form.control}
                     render={({ field }) => (
                         <FormItem>
+                            <Label text="Password" />
                             <FormControl>
-                                <Input type="password" placeholder="Your password" {...field} />
+                                <Input type="password" placeholder="Password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full">
-                    Sign up
+                <FormField
+                    name="confirm"
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormItem>
+                            <Label text="Comfirm Password" />
+                            <FormControl>
+                                <Input type="password" placeholder="Confirm password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <Button type="submit" className="w-full space-x-2" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting && <LoaderIcon className="animate-spin" />} <span>Sign up</span>
                 </Button>
                 <div className="flex items-center justify-center">
-                    <Button variant="link" className="px-0" type="button">
+                    <Button variant="link" className="px-0 border-none" type="button">
                         <Link href="/sign-in">Already have an account?</Link>
                     </Button>
                 </div>

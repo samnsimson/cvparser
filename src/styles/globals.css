@@ -89,32 +89,12 @@
         @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider;
     }
 
-    textarea {
+    /* textarea {
         @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider !important;
-    }
+    } */
 
     input:disabled {
         @apply bg-zinc-200;
-    }
-
-    button:not(:where([type="button"], [role="radio"])) {
-        @apply min-h-12 min-w-12 rounded-none text-base tracking-wider uppercase !important;
-    }
-
-    button[type="button"][role="radio"]:not([role="gridcell"]),
-    button[type="button"][role="combobox"],
-    button[type="button"],
-    button[type="submit"] {
-        @apply min-h-12 data-[state=on]:bg-neutral-800 data-[state=on]:text-white rounded-none border uppercase !important;
-    }
-
-    button[type="button"][role="radio"]:not([role="gridcell"]),
-    button[type="button"][role="combobox"] {
-        @apply border-neutral-700 !important;
-    }
-
-    button[type="button"][role="gridcell"] {
-        @apply rounded-none;
     }
 
     div[data-radix-popper-content-wrapper] {

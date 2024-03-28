@@ -62,10 +62,10 @@ export const SignInForm: FC<SignInFormProps> = ({}) => {
                     Submit
                 </Button>
                 <div className="flex items-center justify-between">
-                    <Button variant="link" className="px-0 text-sm" type="button">
+                    <Button variant="link" className="px-0 text-sm border-none" type="button">
                         <Link href="/sign-up">Create an account</Link>
                     </Button>
-                    <Button variant="link" className="px-0 text-sm" type="button">
+                    <Button variant="link" className="px-0 text-sm border-none" type="button">
                         Forgot password?
                     </Button>
                 </div>

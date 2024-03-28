@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, HTMLAttributes, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import moment from "moment";
+import { Label } from "../form";
 
 interface JobFormProps extends HTMLAttributes<HTMLDivElement> {
     [x: string]: any;
@@ -25,8 +26,6 @@ interface JobFormProps extends HTMLAttributes<HTMLDivElement> {
 
 const Schema = JobOptionalDefaultsSchema.omit({ createdById: true });
 type SchemaType = z.infer<typeof Schema>;
-
-const Label: FC<{ text: string }> = ({ text }) => <FormLabel className="uppercase text-stone-500">{text}</FormLabel>;
 
 export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
     const jobMutation = api.job.createJob.useMutation();
@@ -188,8 +187,9 @@ export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
                                     <PopoverTrigger asChild>
                                         <FormControl>
                                             <Button
+                                                type="button"
                                                 variant={"outline"}
-                                                className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                                                className={cn("w-full pl-3 text-left font-normal border-neutral-700", !field.value && "text-muted-foreground")}
                                             >
                                                 {field.value ? moment(field.value).format("YYYY-MM-DD") : <span>Job expires on</span>}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
