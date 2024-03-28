@@ -68,6 +68,7 @@ model Job {
     expiryDate            DateTime? /// @zod.date({invalid_type_error:"Date is invalid"})
     createdBy             User               @relation(fields: [createdById], references: [id])
     createdById           String /// @zod.string.min(1, {message: "User is required"}).uuid({message:"User ID is invalid"})
+    resumes               JobsAndResumes[]
     candidates            CandidatesOnJobs[]
     shortListedCandidates ShortListed[]
     createdAt             DateTime           @default(now())
@@ -116,6 +117,7 @@ model Candidate {
 }
 
 model CandidatesOnJobs {
+    id          String    @id @default(uuid())
     candidate   Candidate @relation(fields: [candidateId], references: [id])
     candidateId String
     job         Job       @relation(fields: [jobId], references: [id])
@@ -123,10 +125,12 @@ model CandidatesOnJobs {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 
+    @@unique([id])
     @@unique([candidateId, jobId])
 }
 
 model ShortListed {
+    id          String    @id @default(uuid())
     user        User      @relation(fields: [userId], references: [id])
     userId      String
     candidate   Candidate @relation(fields: [candidateId], references: [id])
@@ -136,16 +140,32 @@ model ShortListed {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 
+    @@unique([id])
     @@unique([userId, jobId, candidateId])
 }
 
 model Resume {
-    id          String    @id @default(uuid())
+    id          String           @id @default(uuid())
+    key         String           @unique /// @zod.string.uuid({message:"Key is invalid"})
+    path        String? /// @zod.string
+    fullPath    String? /// @zod.string
     url         String /// @zod.string.url({message:"URL is invalid"})
-    candidate   Candidate @relation(fields: [candidateId], references: [id])
-    candidateId String
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
+    candidate   Candidate?       @relation(fields: [candidateId], references: [id])
+    candidateId String?
+    jobs        JobsAndResumes[]
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+}
+
+model JobsAndResumes {
+    id       String @id @default(uuid())
+    job      Job    @relation(fields: [jobId], references: [id])
+    resume   Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+    jobId    String
+    resumeId String
+
+    @@unique([id])
+    @@unique([jobId, resumeId])
 }
 
 enum Gender {

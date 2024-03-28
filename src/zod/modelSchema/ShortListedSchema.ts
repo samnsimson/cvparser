@@ -23,6 +23,7 @@ import { JobOptionalDefaultsWithRelationsSchema } from './JobSchema'
 /////////////////////////////////////////
 
 export const ShortListedSchema = z.object({
+  id: z.string().uuid(),
   userId: z.string(),
   candidateId: z.string(),
   jobId: z.string(),
@@ -45,6 +46,7 @@ export type ShortListedPartial = z.infer<typeof ShortListedPartialSchema>
 /////////////////////////////////////////
 
 export const ShortListedOptionalDefaultsSchema = ShortListedSchema.merge(z.object({
+  id: z.string().uuid().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
 }))

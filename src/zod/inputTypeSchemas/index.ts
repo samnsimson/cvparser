@@ -7,6 +7,7 @@ export { CandidateScalarFieldEnumSchema } from './CandidateScalarFieldEnumSchema
 export { CandidatesOnJobsScalarFieldEnumSchema } from './CandidatesOnJobsScalarFieldEnumSchema';
 export { ShortListedScalarFieldEnumSchema } from './ShortListedScalarFieldEnumSchema';
 export { ResumeScalarFieldEnumSchema } from './ResumeScalarFieldEnumSchema';
+export { JobsAndResumesScalarFieldEnumSchema } from './JobsAndResumesScalarFieldEnumSchema';
 export { SortOrderSchema } from './SortOrderSchema';
 export { NullableJsonNullValueInputSchema } from './NullableJsonNullValueInputSchema';
 export { QueryModeSchema } from './QueryModeSchema';

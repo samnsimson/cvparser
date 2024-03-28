@@ -17,6 +17,7 @@ import { JobOptionalDefaultsWithRelationsSchema } from './JobSchema'
 /////////////////////////////////////////
 
 export const CandidatesOnJobsSchema = z.object({
+  id: z.string().uuid(),
   candidateId: z.string(),
   jobId: z.string(),
   createdAt: z.coerce.date(),
@@ -38,6 +39,7 @@ export type CandidatesOnJobsPartial = z.infer<typeof CandidatesOnJobsPartialSche
 /////////////////////////////////////////
 
 export const CandidatesOnJobsOptionalDefaultsSchema = CandidatesOnJobsSchema.merge(z.object({
+  id: z.string().uuid().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
 }))
