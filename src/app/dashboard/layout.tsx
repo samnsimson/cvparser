@@ -17,7 +17,7 @@ const layout: FC<{ children: ReactNode }> = async ({ children }) => {
                 <HeaderAccountsSection />
             </div>
             <div className="flex h-full">
-                <div className="w-[90px] border-r">
+                <div className="w-[90px] border-r bg-[#494D56]">
                     <SidebarNav />
                 </div>
                 <div className="flex-1">{children}</div>

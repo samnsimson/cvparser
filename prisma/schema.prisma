@@ -25,19 +25,20 @@ generator zod {
 }
 
 model User {
-    id            String       @id @default(uuid())
+    id            String        @id @default(uuid())
     name          String /// @zod.string.min(1)
-    email         String       @unique /// @zod.string.email({message: "Email is invalid"})
-    phone         String       @unique /// @zod.string.regex(new RegExp(/^\+?[1-9]\d{9,14}$/), "Phone number is invalid")
+    email         String        @unique /// @zod.string.email({message: "Email is invalid"})
+    phone         String        @unique /// @zod.string.regex(new RegExp(/^\+?[1-9]\d{9,14}$/), "Phone number is invalid")
     password      String /// @zod.string.min(6).max(16)
-    role          Role?        @default(USER)
-    emailVerified Boolean?     @default(false)
-    phoneVerified Boolean?     @default(false)
+    role          Role?         @default(USER)
+    emailVerified Boolean?      @default(false)
+    phoneVerified Boolean?      @default(false)
     profile       Profile?
     Job           Job[]
     Department    Department[]
-    createdAt     DateTime     @default(now())
-    updatedAt     DateTime     @updatedAt
+    shortListed   ShortListed[]
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
 }
 
 model Profile {
@@ -56,18 +57,21 @@ model Profile {
 }
 
 model Job {
-    id           String     @id @default(uuid())
-    title        String /// @zod.string.min(1, {message: "Title cannot be empty"})
-    description  String?
-    jobType      JobType?   @default(FULL_TIME)
-    department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-    departmentId String /// @zod.string.min(1, {message: "Department is required"}).uuid({message:"User ID is invalid"})
-    location     String?
-    shiftType    ShiftType? @default(DAY)
-    createdBy    User       @relation(fields: [createdById], references: [id])
-    createdById  String /// @zod.string.min(1, {message: "User is required"}).uuid({message:"User ID is invalid"})
-    createdAt    DateTime   @default(now())
-    udpatedAt    DateTime   @updatedAt
+    id                    String             @id @default(uuid())
+    title                 String /// @zod.string.min(1, {message: "Title cannot be empty"})
+    description           String?
+    jobType               JobType?           @default(FULL_TIME)
+    department            Department         @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+    departmentId          String /// @zod.string.min(1, {message: "Department is required"}).uuid({message:"User ID is invalid"})
+    location              String?
+    shiftType             ShiftType?         @default(DAY)
+    expiryDate            DateTime? /// @zod.date({invalid_type_error:"Date is invalid"})
+    createdBy             User               @relation(fields: [createdById], references: [id])
+    createdById           String /// @zod.string.min(1, {message: "User is required"}).uuid({message:"User ID is invalid"})
+    candidates            CandidatesOnJobs[]
+    shortListedCandidates ShortListed[]
+    createdAt             DateTime           @default(now())
+    udpatedAt             DateTime           @updatedAt
 }
 
 model Department {
@@ -80,6 +84,73 @@ model Department {
     createdById String /// @zod.string.min(1, {message: "User is required"}).uuid({message:"User ID is invalid"})
     createdAt   DateTime @default(now())
     udpatedAt   DateTime @updatedAt
+}
+
+model Candidate {
+    id                 String             @id @default(uuid())
+    name               String /// @zod.string.min(1, {message:"Name cannot be empty"})
+    email              String? /// @zod.string.email({message:"Email is invalid"})
+    phone              String? /// @zod.string.regex(new RegExp(/^\+?[1-9]\d{9,14}$/), "Phone number is invalid")
+    address            String? /// @zod.string.min(1, {message: "Address cannot be empty"})
+    city               String? /// @zod.string.min(1, {message: "City cannot be empty"}) 
+    state              String? /// @zod.string.min(1, {message: "State cannot be empty"})
+    country            String? /// @zod.string.min(1, {message: "Country cannot be empty"})
+    zipCode            String? /// @zod.string.min(1, {message: "Zip code cannot be empty"})
+    age                Int? /// @zod.number.positive({message:"Age must be a valid number"})
+    dob                DateTime? /// @zod.date({invalid_type_error:"Date is invalid"})
+    gender             Gender?            @default(MALE)
+    jobExperience      Json?
+    totalExperience    Json?
+    relevantExperience Json?
+    skills             Json?
+    pros               Json?
+    cons               Json?
+    score              Int? /// @zod.number.positive({message:"Score must be a valid number"})
+    resume             Resume[]
+    jobs               CandidatesOnJobs[]
+    shortListedJobs    ShortListed[]
+    activeResumeId     String?            @unique
+    createdAt          DateTime           @default(now())
+    updatedAt          DateTime           @updatedAt
+    resumeId           String
+}
+
+model CandidatesOnJobs {
+    candidate   Candidate @relation(fields: [candidateId], references: [id])
+    candidateId String
+    job         Job       @relation(fields: [jobId], references: [id])
+    jobId       String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@unique([candidateId, jobId])
+}
+
+model ShortListed {
+    user        User      @relation(fields: [userId], references: [id])
+    userId      String
+    candidate   Candidate @relation(fields: [candidateId], references: [id])
+    candidateId String
+    job         Job       @relation(fields: [jobId], references: [id])
+    jobId       String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@unique([userId, jobId, candidateId])
+}
+
+model Resume {
+    id          String    @id @default(uuid())
+    url         String /// @zod.string.url({message:"URL is invalid"})
+    candidate   Candidate @relation(fields: [candidateId], references: [id])
+    candidateId String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+}
+
+enum Gender {
+    MALE
+    FEMALE
 }
 
 enum JobType {

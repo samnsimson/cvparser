@@ -9,6 +9,9 @@ import type { JobOptionalDefaultsWithRelations } from './JobSchema'
 import type { DepartmentWithRelations } from './DepartmentSchema'
 import type { DepartmentPartialWithRelations } from './DepartmentSchema'
 import type { DepartmentOptionalDefaultsWithRelations } from './DepartmentSchema'
+import type { ShortListedWithRelations } from './ShortListedSchema'
+import type { ShortListedPartialWithRelations } from './ShortListedSchema'
+import type { ShortListedOptionalDefaultsWithRelations } from './ShortListedSchema'
 import { ProfileWithRelationsSchema } from './ProfileSchema'
 import { ProfilePartialWithRelationsSchema } from './ProfileSchema'
 import { ProfileOptionalDefaultsWithRelationsSchema } from './ProfileSchema'
@@ -18,6 +21,9 @@ import { JobOptionalDefaultsWithRelationsSchema } from './JobSchema'
 import { DepartmentWithRelationsSchema } from './DepartmentSchema'
 import { DepartmentPartialWithRelationsSchema } from './DepartmentSchema'
 import { DepartmentOptionalDefaultsWithRelationsSchema } from './DepartmentSchema'
+import { ShortListedWithRelationsSchema } from './ShortListedSchema'
+import { ShortListedPartialWithRelationsSchema } from './ShortListedSchema'
+import { ShortListedOptionalDefaultsWithRelationsSchema } from './ShortListedSchema'
 
 /////////////////////////////////////////
 // USER SCHEMA
@@ -69,6 +75,7 @@ export type UserRelations = {
   profile?: ProfileWithRelations | null;
   Job: JobWithRelations[];
   Department: DepartmentWithRelations[];
+  shortListed: ShortListedWithRelations[];
 };
 
 export type UserWithRelations = z.infer<typeof UserSchema> & UserRelations
@@ -77,6 +84,7 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.
   profile: z.lazy(() => ProfileWithRelationsSchema).nullish(),
   Job: z.lazy(() => JobWithRelationsSchema).array(),
   Department: z.lazy(() => DepartmentWithRelationsSchema).array(),
+  shortListed: z.lazy(() => ShortListedWithRelationsSchema).array(),
 }))
 
 /////////////////////////////////////////
@@ -87,6 +95,7 @@ export type UserOptionalDefaultsRelations = {
   profile?: ProfileOptionalDefaultsWithRelations | null;
   Job: JobOptionalDefaultsWithRelations[];
   Department: DepartmentOptionalDefaultsWithRelations[];
+  shortListed: ShortListedOptionalDefaultsWithRelations[];
 };
 
 export type UserOptionalDefaultsWithRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserOptionalDefaultsRelations
@@ -95,6 +104,7 @@ export const UserOptionalDefaultsWithRelationsSchema: z.ZodType<UserOptionalDefa
   profile: z.lazy(() => ProfileOptionalDefaultsWithRelationsSchema).nullish(),
   Job: z.lazy(() => JobOptionalDefaultsWithRelationsSchema).array(),
   Department: z.lazy(() => DepartmentOptionalDefaultsWithRelationsSchema).array(),
+  shortListed: z.lazy(() => ShortListedOptionalDefaultsWithRelationsSchema).array(),
 }))
 
 /////////////////////////////////////////
@@ -105,6 +115,7 @@ export type UserPartialRelations = {
   profile?: ProfilePartialWithRelations | null;
   Job?: JobPartialWithRelations[];
   Department?: DepartmentPartialWithRelations[];
+  shortListed?: ShortListedPartialWithRelations[];
 };
 
 export type UserPartialWithRelations = z.infer<typeof UserPartialSchema> & UserPartialRelations
@@ -113,6 +124,7 @@ export const UserPartialWithRelationsSchema: z.ZodType<UserPartialWithRelations>
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
   Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
   Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
+  shortListed: z.lazy(() => ShortListedPartialWithRelationsSchema).array(),
 })).partial()
 
 export type UserOptionalDefaultsWithPartialRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserPartialRelations
@@ -121,6 +133,7 @@ export const UserOptionalDefaultsWithPartialRelationsSchema: z.ZodType<UserOptio
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
   Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
   Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
+  shortListed: z.lazy(() => ShortListedPartialWithRelationsSchema).array(),
 }).partial())
 
 export type UserWithPartialRelations = z.infer<typeof UserSchema> & UserPartialRelations
@@ -129,6 +142,7 @@ export const UserWithPartialRelationsSchema: z.ZodType<UserWithPartialRelations>
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
   Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
   Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
+  shortListed: z.lazy(() => ShortListedPartialWithRelationsSchema).array(),
 }).partial())
 
 export default UserSchema;

@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Home } from "lucide-react";
+import { BriefcaseBusiness, Home, ListTree } from "lucide-react";
 import Link from "next/link";
 import { FC, HTMLAttributes, ReactNode } from "react";
 
@@ -23,15 +23,24 @@ const NavList: Array<LinkType> = [
         link: "/dashboard/jobs",
         icon: <BriefcaseBusiness />,
     },
+    {
+        name: "Departments",
+        link: "/dashboard/departments",
+        icon: <ListTree />,
+    },
 ];
 
 export const SidebarNav: FC<SidebarNavProps> = ({ ...props }) => {
     return (
-        <div {...props}>
+        <div className="" {...props}>
             <ul className="flex flex-col items-center">
                 {NavList.map((list, key) => (
-                    <Link href={list.link} key={key} className="py-4 w-full flex items-center justify-center min-h-16 border-b group hover:bg-sky-700">
-                        <span className="group-hover:text-white">{list.icon}</span>
+                    <Link
+                        href={list.link}
+                        key={key}
+                        className="py-4 w-full flex items-center justify-center border-b border-b-neutral-900 min-h-16 group hover:bg-[#41B9BD]"
+                    >
+                        <span className="group-hover:text-white text-white">{list.icon}</span>
                     </Link>
                 ))}
             </ul>

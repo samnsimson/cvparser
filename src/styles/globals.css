@@ -76,6 +76,12 @@
 }
 
 @layer components {
+    input,
+    select,
+    textarea {
+        @apply border-neutral-700 !important;
+    }
+
     input:not([type="file"]),
     input:not([type="image"]),
     input:not([type="checkbox"]),
@@ -95,8 +101,20 @@
         @apply min-h-12 min-w-12 rounded-none text-base tracking-wider uppercase !important;
     }
 
-    button:where([type="button"], [role="radio"]) {
+    button[type="button"][role="radio"]:not([role="gridcell"]),
+    button[type="button"][role="combobox"],
+    button[type="button"],
+    button[type="submit"] {
         @apply min-h-12 data-[state=on]:bg-neutral-800 data-[state=on]:text-white rounded-none border uppercase !important;
+    }
+
+    button[type="button"][role="radio"]:not([role="gridcell"]),
+    button[type="button"][role="combobox"] {
+        @apply border-neutral-700 !important;
+    }
+
+    button[type="button"][role="gridcell"] {
+        @apply rounded-none;
     }
 
     div[data-radix-popper-content-wrapper] {

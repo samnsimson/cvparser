@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
 import { api } from "@/trpc/react";
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { upperCase } from "lodash";
 import { Badge } from "../ui/badge";
@@ -9,8 +9,9 @@ import { cn } from "@/lib/utils";
 import { JobType, ShiftType } from "@prisma/client";
 import { Skeleton } from "../ui/skeleton";
 import Link from "next/link";
-import { Trash2Icon } from "lucide-react";
+import { LoaderIcon, Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
+import moment from "moment";
 
 interface ListJobsProps extends HTMLAttributes<HTMLDivElement> {
     [x: string]: any;
@@ -19,6 +20,11 @@ interface ListJobsProps extends HTMLAttributes<HTMLDivElement> {
 interface BadgifyProps {
     type: JobType | ShiftType | null;
 }
+
+const expiryBadge = (date: Date | null) => {
+    const valid = date && moment().isBefore(moment(date));
+    return <Badge variant={valid ? "accent" : "destructive"}>{valid ? moment(date).format("YYYY-MM-DD") : "Expired"}</Badge>;
+};
 
 const Badgify: FC<BadgifyProps> = ({ type }) => {
     if (!type) return null;
@@ -72,11 +78,22 @@ const LoadingState: FC = () => {
 };
 
 export const ListJobs: FC<ListJobsProps> = ({ ...props }) => {
+    const [isDeleting, setIsDeleting] = useState<boolean | string>(false);
     const { data: jobs, isFetching, isRefetching, refetch } = api.job.getJobs.useQuery();
     const deleteJobMutation = api.job.deleteJob.useMutation();
 
     const deleteJob = async (id: string) => {
-        deleteJobMutation.mutate({ id }, { onSuccess: () => refetch().then(() => toast.success("Deleted", { description: "Job is deleted successfully!" })) });
+        setIsDeleting(id);
+        deleteJobMutation.mutate(
+            { id },
+            {
+                onSuccess: async () => {
+                    await refetch();
+                    setIsDeleting(false);
+                    toast.success("Deleted", { description: "Job is deleted successfully!" });
+                },
+            },
+        );
     };
 
     if (isFetching && !isRefetching) return <LoadingState />;
@@ -87,10 +104,10 @@ export const ListJobs: FC<ListJobsProps> = ({ ...props }) => {
                     <TableRow>
                         <TableHead className="uppercase bg-sky-700 text-white">Title</TableHead>
                         <TableHead className="uppercase bg-sky-700 text-white">Department</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white">Description</TableHead>
                         <TableHead className="uppercase bg-sky-700 text-white">Location</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white">Job Type</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white">Shift Type</TableHead>
+                        <TableHead className="uppercase bg-sky-700 text-white min-w-32">Job Type</TableHead>
+                        <TableHead className="uppercase bg-sky-700 text-white min-w-32">Shift Type</TableHead>
+                        <TableHead className="uppercase bg-sky-700 text-white">Valid Through</TableHead>
                         <TableHead className="uppercase bg-sky-700 text-white"></TableHead>
                     </TableRow>
                 </TableHeader>
@@ -101,7 +118,6 @@ export const ListJobs: FC<ListJobsProps> = ({ ...props }) => {
                                 <Link href={`job/${job.id}`}>{job.title}</Link>
                             </TableCell>
                             <TableCell>{job.department.title}</TableCell>
-                            <TableCell>{job.description}</TableCell>
                             <TableCell>{job.location}</TableCell>
                             <TableCell>
                                 <Badgify type={job.jobType} />
@@ -109,8 +125,13 @@ export const ListJobs: FC<ListJobsProps> = ({ ...props }) => {
                             <TableCell>
                                 <Badgify type={job.shiftType} />
                             </TableCell>
+                            <TableCell>{expiryBadge(job.expiryDate)}</TableCell>
                             <TableCell>
-                                <Trash2Icon strokeWidth={1} size={20} className="cursor-pointer text-red-500" onClick={() => deleteJob(job.id)} />
+                                {isDeleting === job.id ? (
+                                    <LoaderIcon strokeWidth={1} size={20} className="animate-spin" />
+                                ) : (
+                                    <Trash2Icon strokeWidth={1} size={20} className="cursor-pointer text-red-500" onClick={() => deleteJob(job.id)} />
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}
