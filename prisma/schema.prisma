@@ -174,7 +174,7 @@ model Resume {
     createdAt   DateTime         @default(now())
     updatedAt   DateTime         @updatedAt
 
-    @@index([fileKey])
+    @@index([fileKey, createdById])
     @@map("resume")
 }
 

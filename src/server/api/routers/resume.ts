@@ -1,9 +1,9 @@
-import { ResumeOptionalDefaultsWithPartialRelationsSchema } from "@/zod";
+import { ResumeOptionalDefaultsSchema } from "@/zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 const CreateEntrySchema = z.object({
-    data: ResumeOptionalDefaultsWithPartialRelationsSchema,
+    data: ResumeOptionalDefaultsSchema.omit({ createdById: true }),
     jobId: z.string().uuid(),
 });
 
@@ -12,6 +12,8 @@ export const resumeRouter = createTRPCRouter({
         return await ctx.db.resume.findMany();
     }),
     createEntry: protectedProcedure.input(CreateEntrySchema).mutation(async ({ ctx, input: { data, jobId } }) => {
-        return await ctx.db.resume.create({ data: { ...data, candidate: undefined, jobs: { create: { job: { connect: { id: jobId } } } } } });
+        return await ctx.db.resume.create({
+            data: { ...data, createdById: ctx.session.user.id, candidate: undefined, jobs: { create: { job: { connect: { id: jobId } } } } },
+        });
     }),
 });

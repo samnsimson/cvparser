@@ -119,7 +119,7 @@ export const UploadForm: FC<UploadFormProps> = ({ ...props }) => {
                                 <FormControl className="hidden">
                                     <Input onChange={(e) => onChange(e.target.value)} value={params.get("jobid") ?? ""} {...omit(field, ["value"])} />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="text-center" />
                             </FormItem>
                         )}
                     />
