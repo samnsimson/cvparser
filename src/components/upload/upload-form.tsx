@@ -66,7 +66,7 @@ export const UploadForm: FC<UploadFormProps> = ({ ...props }) => {
     useEffect(() => form.setValue("jobId", params.get("jobid") ?? ""), [params, form]);
 
     return (
-        <div {...props} className="p-6 border-b">
+        <div {...props} className="border-b p-6">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(upload)}>
                     <FormField
@@ -79,11 +79,11 @@ export const UploadForm: FC<UploadFormProps> = ({ ...props }) => {
                                         <FormLabel
                                             htmlFor="dropzone-file"
                                             className={cn(
-                                                "flex flex-col items-center justify-center w-full h-32 border-2 border-sky-300/50 border-dashed rounded-none cursor-pointer bg-sky-50/50",
+                                                "flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-none border-2 border-dashed border-sky-300/50 bg-sky-50/50",
                                             )}
                                         >
                                             {!!!field.value ? (
-                                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <div className="flex flex-col items-center justify-center pb-6 pt-5">
                                                     <UploadCloud />
                                                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                                         <span className="font-semibold">Click to upload</span> or drag and drop

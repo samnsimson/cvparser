@@ -71,7 +71,7 @@
         @apply border-border;
     }
     body {
-        @apply bg-background text-foreground text-base;
+        @apply bg-background text-base text-foreground;
     }
 }
 
@@ -86,7 +86,7 @@
     input:not([type="image"]),
     input:not([type="checkbox"]),
     input:not([type="radio"]) {
-        @apply rounded-none leading-6 min-h-12 text-base font-light focus:ring-offset-0 focus:ring-neutral-700 tracking-wider;
+        @apply min-h-12 rounded-none text-base font-light leading-6 tracking-wider focus:ring-neutral-700 focus:ring-offset-0;
     }
 
     /* textarea {

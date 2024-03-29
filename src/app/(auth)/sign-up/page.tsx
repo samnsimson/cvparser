@@ -2,7 +2,7 @@ import { SignUpForm } from "@/components/auth";
 
 const SignUpPage = () => {
     return (
-        <div className="w-full flex items-center justify-center">
+        <div className="flex w-full items-center justify-center">
             <SignUpForm />
         </div>
     );

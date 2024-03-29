@@ -37,7 +37,7 @@ const ToggleGroupItem = React.forwardRef<
                     variant: context.variant ?? variant,
                     size: context.size ?? size,
                 }),
-                "border-neutral-700 border rounded-none min-h-12 data-[state=on]:bg-primary uppercase tracking-wide data-[state=on]:text-white",
+                "min-h-12 rounded-none border border-neutral-700 uppercase tracking-wide data-[state=on]:bg-primary data-[state=on]:text-white",
                 className,
             )}
             {...props}

@@ -38,9 +38,9 @@ export const SidebarNav: FC<SidebarNavProps> = ({ ...props }) => {
                     <Link
                         href={list.link}
                         key={key}
-                        className="py-4 w-full flex items-center justify-center border-b border-b-neutral-900 min-h-16 group hover:bg-[#41B9BD]"
+                        className="group flex min-h-16 w-full items-center justify-center border-b border-b-neutral-900 py-4 hover:bg-[#41B9BD]"
                     >
-                        <span className="group-hover:text-white text-white">{list.icon}</span>
+                        <span className="text-white group-hover:text-white">{list.icon}</span>
                     </Link>
                 ))}
             </ul>

@@ -3,7 +3,7 @@ import { Title } from "@/components/section";
 
 const DepartmentsPage = () => {
     return (
-        <div className="grid grid-cols-6 h-full">
+        <div className="grid h-full grid-cols-6">
             <div className="col-span-2">
                 <Title text="Create New Department" className="border-b" />
                 <CreteDepartmentForm />

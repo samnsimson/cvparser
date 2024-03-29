@@ -32,7 +32,7 @@ export const SignInForm: FC<SignInFormProps> = ({}) => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col w-full max-w-lg">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full max-w-lg flex-col space-y-6">
                 {error && <AlertError error={error} />}
                 <FormField
                     name="email"
@@ -62,10 +62,10 @@ export const SignInForm: FC<SignInFormProps> = ({}) => {
                     Submit
                 </Button>
                 <div className="flex items-center justify-between">
-                    <Button variant="link" className="px-0 text-sm border-none" type="button">
+                    <Button variant="link" className="border-none px-0 text-sm" type="button">
                         <Link href="/sign-up">Create an account</Link>
                     </Button>
-                    <Button variant="link" className="px-0 text-sm border-none" type="button">
+                    <Button variant="link" className="border-none px-0 text-sm" type="button">
                         Forgot password?
                     </Button>
                 </div>

@@ -17,10 +17,10 @@ class Seed {
 
     protected clearTables = async () => {
         const promises = [];
+        promises.push(this.prisma.department.deleteMany());
         promises.push(this.prisma.user.deleteMany());
         promises.push(this.prisma.profile.deleteMany());
         promises.push(this.prisma.job.deleteMany());
-        promises.push(this.prisma.department.deleteMany());
         promises.push(this.prisma.candidate.deleteMany());
         promises.push(this.prisma.candidatesOnJobs.deleteMany());
         promises.push(this.prisma.shortListed.deleteMany());

@@ -44,7 +44,7 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col w-full max-w-lg">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full max-w-lg flex-col space-y-6">
                 <FormField
                     name="name"
                     control={form.control}
@@ -114,7 +114,7 @@ export const SignUpForm: FC<SignUpFormProps> = ({}) => {
                     {form.formState.isSubmitting && <LoaderIcon className="animate-spin" />} <span>Sign up</span>
                 </Button>
                 <div className="flex items-center justify-center">
-                    <Button variant="link" className="px-0 border-none" type="button">
+                    <Button variant="link" className="border-none px-0" type="button">
                         <Link href="/sign-in">Already have an account?</Link>
                     </Button>
                 </div>

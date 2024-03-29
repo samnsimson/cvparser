@@ -9,7 +9,10 @@ const CreateEntrySchema = z.object({
 
 export const resumeRouter = createTRPCRouter({
     getResumes: protectedProcedure.query(async ({ ctx }) => {
-        return await ctx.db.resume.findMany();
+        return await ctx.db.resume.findMany({ where: { createdById: ctx.session.user.id } });
+    }),
+    getResumesForJobs: protectedProcedure.input(z.object({ jobId: z.string().uuid() })).query(async ({ ctx, input: { jobId } }) => {
+        return await ctx.db.resume.findMany({ where: { createdById: ctx.session.user.id, jobs: { some: { jobId } } } });
     }),
     createEntry: protectedProcedure.input(CreateEntrySchema).mutation(async ({ ctx, input: { data, jobId } }) => {
         return await ctx.db.resume.create({

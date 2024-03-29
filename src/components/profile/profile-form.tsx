@@ -33,18 +33,18 @@ const buildDefaultValues = (profile: ProfileProps | null | undefined, session: S
 
 const LoadingState: FC = () => {
     return (
-        <div className="grid gric-cols-2 gap-6">
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-2" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-2" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-1" />
-            <Skeleton className="rounded-none h-12 bg-zinc-200 col-span-2" />
+        <div className="gric-cols-2 grid gap-6">
+            <Skeleton className="col-span-2 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-2 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-1 h-12 rounded-none bg-zinc-200" />
+            <Skeleton className="col-span-2 h-12 rounded-none bg-zinc-200" />
         </div>
     );
 };
@@ -198,7 +198,7 @@ export const ProfileForm: FC = ({}) => {
                         </FormItem>
                     )}
                 />
-                <Button type="submit" className="w-full col-span-2" disabled={isSubmitting || !isValid}>
+                <Button type="submit" className="col-span-2 w-full" disabled={isSubmitting || !isValid}>
                     UPDATE PROFILE
                 </Button>
             </form>

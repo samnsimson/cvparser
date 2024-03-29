@@ -56,7 +56,7 @@ export const UpdatePasswordForm = () => {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 {formErrors.length > 0 && (
-                    <Alert className="rounded-none bg-red-50 space-x-3" variant="destructive">
+                    <Alert className="space-x-3 rounded-none bg-red-50" variant="destructive">
                         <InfoIcon />
                         <AlertTitle>Error!</AlertTitle>
                         {formErrors.map((error, key) => (

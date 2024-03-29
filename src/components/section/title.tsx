@@ -8,8 +8,8 @@ interface TitleProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Title: FC<TitleProps> = ({ text, className, ...props }) => {
     return (
-        <div className={cn("w-full min-h-16 bg-stone-100 flex items-center px-4", className)} {...props}>
-            <span className="font-bold text-lg text-gray-500">{text}</span>
+        <div className={cn("flex min-h-16 w-full items-center bg-stone-100 px-4", className)} {...props}>
+            <span className="text-lg font-bold text-gray-500">{text}</span>
         </div>
     );
 };

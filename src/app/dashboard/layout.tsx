@@ -9,8 +9,8 @@ const layout: FC<{ children: ReactNode }> = async ({ children }) => {
     if (!session || !session.user) redirect("/sign-in");
 
     return (
-        <div className="h-screen flex flex-col">
-            <div className="min-h-20 border-b shadow sticky top-0 flex justify-between items-center px-4">
+        <div className="flex h-screen flex-col">
+            <div className="sticky top-0 flex min-h-20 items-center justify-between border-b px-4 shadow">
                 <div>
                     <h1>Dashboard</h1>
                 </div>

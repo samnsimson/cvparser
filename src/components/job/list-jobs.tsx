@@ -33,13 +33,13 @@ const Badgify: FC<BadgifyProps> = ({ type }) => {
         <Badge
             variant="outline"
             className={cn({
-                "text-sky-500 border-sky-500 bg-sky-100": type === "FULL_TIME",
-                "text-stone-500 border-stone-500 bg-stone-100": type === "PART_TIME",
-                "text-amber-500 border-amber-500 bg-amber-100": type === "HYBRID",
-                "text-rose-500 border-rose-500 bg-rose-100": type === "REMOTE",
-                "text-emerald-500 border-emerald-500 bg-emerald-100": type === "DAY",
-                "text-zinc-500 border-zinc-500 bg-zinc-100": type === "NIGHT",
-                "text-indigo-500 border-indigo-500 bg-indigo-100": type === "MIXED",
+                "border-sky-500 bg-sky-100 text-sky-500": type === "FULL_TIME",
+                "border-stone-500 bg-stone-100 text-stone-500": type === "PART_TIME",
+                "border-amber-500 bg-amber-100 text-amber-500": type === "HYBRID",
+                "border-rose-500 bg-rose-100 text-rose-500": type === "REMOTE",
+                "border-emerald-500 bg-emerald-100 text-emerald-500": type === "DAY",
+                "border-zinc-500 bg-zinc-100 text-zinc-500": type === "NIGHT",
+                "border-indigo-500 bg-indigo-100 text-indigo-500": type === "MIXED",
             })}
         >
             {value}
@@ -102,19 +102,19 @@ export const ListJobs: FC<ListJobsProps> = ({ ...props }) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="uppercase bg-sky-700 text-white">Title</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white">Department</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white">Location</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white min-w-32">Job Type</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white min-w-32">Shift Type</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white">Valid Through</TableHead>
-                        <TableHead className="uppercase bg-sky-700 text-white"></TableHead>
+                        <TableHead className="bg-sky-700 uppercase text-white">Title</TableHead>
+                        <TableHead className="bg-sky-700 uppercase text-white">Department</TableHead>
+                        <TableHead className="bg-sky-700 uppercase text-white">Location</TableHead>
+                        <TableHead className="min-w-32 bg-sky-700 uppercase text-white">Job Type</TableHead>
+                        <TableHead className="min-w-32 bg-sky-700 uppercase text-white">Shift Type</TableHead>
+                        <TableHead className="bg-sky-700 uppercase text-white">Valid Through</TableHead>
+                        <TableHead className="bg-sky-700 uppercase text-white"></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {jobs?.map((job) => (
                         <TableRow key={job.id}>
-                            <TableCell className="hover:underline text-sky-700">
+                            <TableCell className="text-sky-700 hover:underline">
                                 <Link href={`job/${job.id}`}>{job.title}</Link>
                             </TableCell>
                             <TableCell>{job.department.title}</TableCell>

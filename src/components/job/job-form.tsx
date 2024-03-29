@@ -89,7 +89,7 @@ export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
                                                     </SelectItem>
                                                 ))
                                             ) : (
-                                                <div className="p-6 flex flex-col items-center justify-center text-gray-400 space-y-4">
+                                                <div className="flex flex-col items-center justify-center space-y-4 p-6 text-gray-400">
                                                     <FolderTree />
                                                     <p className="font-semibold">Nothing to select</p>
                                                     <Button type="button">Create Department</Button>
@@ -189,7 +189,7 @@ export const JobForm: FC<JobFormProps> = ({ className, ...props }) => {
                                             <Button
                                                 type="button"
                                                 variant={"outline"}
-                                                className={cn("w-full pl-3 text-left font-normal border-neutral-700", !field.value && "text-muted-foreground")}
+                                                className={cn("w-full border-neutral-700 pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                                             >
                                                 {field.value ? moment(field.value).format("YYYY-MM-DD") : <span>Job expires on</span>}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />

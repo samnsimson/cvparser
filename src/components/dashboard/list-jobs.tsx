@@ -13,7 +13,7 @@ interface ListJobProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const LoadingSkeleton: FC = () => {
-    return Array.from({ length: 8 }, (_, key) => <Skeleton key={key} className="w-full min-h-16 border rounded-none" />);
+    return Array.from({ length: 8 }, (_, key) => <Skeleton key={key} className="min-h-16 w-full rounded-none border" />);
 };
 
 export const ListJobs: FC<ListJobProps> = ({ ...props }) => {
@@ -33,7 +33,7 @@ export const ListJobs: FC<ListJobProps> = ({ ...props }) => {
 
     return (
         <div {...props}>
-            <form className="flex p-6 border-b" onSubmit={handleSubmit}>
+            <form className="flex border-b p-6" onSubmit={handleSubmit}>
                 <Input name="search" type="text" placeholder="Search jobs..." />
                 <Button type="submit">
                     <Search />
@@ -46,7 +46,7 @@ export const ListJobs: FC<ListJobProps> = ({ ...props }) => {
                         href={{ query: { jobid: job.id } }}
                         key={job.id}
                         data-active={jobId === job.id}
-                        className="w-full px-6 py-4 border-b flex items-center justify-between min-h-16 hover:bg-stone-50 data-[active=true]:border data-[active=true]:bg-sky-100  data-[active=true]:border-y-sky-700 data-[active=true]:text-sky-700"
+                        className="flex min-h-16 w-full items-center justify-between border-b px-6 py-4 hover:bg-stone-50 data-[active=true]:border data-[active=true]:border-y-sky-700  data-[active=true]:bg-sky-100 data-[active=true]:text-sky-700"
                     >
                         <span className="font-normal tracking-wide">{job.title}</span> {jobId === job.id && <ArrowRight />}
                     </Link>
