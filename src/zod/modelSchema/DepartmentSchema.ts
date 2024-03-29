@@ -54,14 +54,14 @@ export type DepartmentOptionalDefaults = z.infer<typeof DepartmentOptionalDefaul
 /////////////////////////////////////////
 
 export type DepartmentRelations = {
-  Job: JobWithRelations[];
+  job: JobWithRelations[];
   createdBy: UserWithRelations;
 };
 
 export type DepartmentWithRelations = z.infer<typeof DepartmentSchema> & DepartmentRelations
 
 export const DepartmentWithRelationsSchema: z.ZodType<DepartmentWithRelations> = DepartmentSchema.merge(z.object({
-  Job: z.lazy(() => JobWithRelationsSchema).array(),
+  job: z.lazy(() => JobWithRelationsSchema).array(),
   createdBy: z.lazy(() => UserWithRelationsSchema),
 }))
 
@@ -70,14 +70,14 @@ export const DepartmentWithRelationsSchema: z.ZodType<DepartmentWithRelations> =
 /////////////////////////////////////////
 
 export type DepartmentOptionalDefaultsRelations = {
-  Job: JobOptionalDefaultsWithRelations[];
+  job: JobOptionalDefaultsWithRelations[];
   createdBy: UserOptionalDefaultsWithRelations;
 };
 
 export type DepartmentOptionalDefaultsWithRelations = z.infer<typeof DepartmentOptionalDefaultsSchema> & DepartmentOptionalDefaultsRelations
 
 export const DepartmentOptionalDefaultsWithRelationsSchema: z.ZodType<DepartmentOptionalDefaultsWithRelations> = DepartmentOptionalDefaultsSchema.merge(z.object({
-  Job: z.lazy(() => JobOptionalDefaultsWithRelationsSchema).array(),
+  job: z.lazy(() => JobOptionalDefaultsWithRelationsSchema).array(),
   createdBy: z.lazy(() => UserOptionalDefaultsWithRelationsSchema),
 }))
 
@@ -86,28 +86,28 @@ export const DepartmentOptionalDefaultsWithRelationsSchema: z.ZodType<Department
 /////////////////////////////////////////
 
 export type DepartmentPartialRelations = {
-  Job?: JobPartialWithRelations[];
+  job?: JobPartialWithRelations[];
   createdBy?: UserPartialWithRelations;
 };
 
 export type DepartmentPartialWithRelations = z.infer<typeof DepartmentPartialSchema> & DepartmentPartialRelations
 
 export const DepartmentPartialWithRelationsSchema: z.ZodType<DepartmentPartialWithRelations> = DepartmentPartialSchema.merge(z.object({
-  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  job: z.lazy(() => JobPartialWithRelationsSchema).array(),
   createdBy: z.lazy(() => UserPartialWithRelationsSchema),
 })).partial()
 
 export type DepartmentOptionalDefaultsWithPartialRelations = z.infer<typeof DepartmentOptionalDefaultsSchema> & DepartmentPartialRelations
 
 export const DepartmentOptionalDefaultsWithPartialRelationsSchema: z.ZodType<DepartmentOptionalDefaultsWithPartialRelations> = DepartmentOptionalDefaultsSchema.merge(z.object({
-  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  job: z.lazy(() => JobPartialWithRelationsSchema).array(),
   createdBy: z.lazy(() => UserPartialWithRelationsSchema),
 }).partial())
 
 export type DepartmentWithPartialRelations = z.infer<typeof DepartmentSchema> & DepartmentPartialRelations
 
 export const DepartmentWithPartialRelationsSchema: z.ZodType<DepartmentWithPartialRelations> = DepartmentSchema.merge(z.object({
-  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  job: z.lazy(() => JobPartialWithRelationsSchema).array(),
   createdBy: z.lazy(() => UserPartialWithRelationsSchema),
 }).partial())
 

@@ -8,6 +8,9 @@ const CreateEntrySchema = z.object({
 });
 
 export const resumeRouter = createTRPCRouter({
+    getResumes: protectedProcedure.query(async ({ ctx }) => {
+        return await ctx.db.resume.findMany();
+    }),
     createEntry: protectedProcedure.input(CreateEntrySchema).mutation(async ({ ctx, input: { data, jobId } }) => {
         return await ctx.db.resume.create({ data: { ...data, candidate: undefined, jobs: { create: { job: { connect: { id: jobId } } } } } });
     }),

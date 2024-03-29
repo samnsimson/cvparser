@@ -12,6 +12,9 @@ import type { DepartmentOptionalDefaultsWithRelations } from './DepartmentSchema
 import type { ShortListedWithRelations } from './ShortListedSchema'
 import type { ShortListedPartialWithRelations } from './ShortListedSchema'
 import type { ShortListedOptionalDefaultsWithRelations } from './ShortListedSchema'
+import type { ResumeWithRelations } from './ResumeSchema'
+import type { ResumePartialWithRelations } from './ResumeSchema'
+import type { ResumeOptionalDefaultsWithRelations } from './ResumeSchema'
 import { ProfileWithRelationsSchema } from './ProfileSchema'
 import { ProfilePartialWithRelationsSchema } from './ProfileSchema'
 import { ProfileOptionalDefaultsWithRelationsSchema } from './ProfileSchema'
@@ -24,6 +27,9 @@ import { DepartmentOptionalDefaultsWithRelationsSchema } from './DepartmentSchem
 import { ShortListedWithRelationsSchema } from './ShortListedSchema'
 import { ShortListedPartialWithRelationsSchema } from './ShortListedSchema'
 import { ShortListedOptionalDefaultsWithRelationsSchema } from './ShortListedSchema'
+import { ResumeWithRelationsSchema } from './ResumeSchema'
+import { ResumePartialWithRelationsSchema } from './ResumeSchema'
+import { ResumeOptionalDefaultsWithRelationsSchema } from './ResumeSchema'
 
 /////////////////////////////////////////
 // USER SCHEMA
@@ -73,18 +79,20 @@ export type UserOptionalDefaults = z.infer<typeof UserOptionalDefaultsSchema>
 
 export type UserRelations = {
   profile?: ProfileWithRelations | null;
-  Job: JobWithRelations[];
-  Department: DepartmentWithRelations[];
+  job: JobWithRelations[];
+  departments: DepartmentWithRelations[];
   shortListed: ShortListedWithRelations[];
+  ownedResumes: ResumeWithRelations[];
 };
 
 export type UserWithRelations = z.infer<typeof UserSchema> & UserRelations
 
 export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.merge(z.object({
   profile: z.lazy(() => ProfileWithRelationsSchema).nullish(),
-  Job: z.lazy(() => JobWithRelationsSchema).array(),
-  Department: z.lazy(() => DepartmentWithRelationsSchema).array(),
+  job: z.lazy(() => JobWithRelationsSchema).array(),
+  departments: z.lazy(() => DepartmentWithRelationsSchema).array(),
   shortListed: z.lazy(() => ShortListedWithRelationsSchema).array(),
+  ownedResumes: z.lazy(() => ResumeWithRelationsSchema).array(),
 }))
 
 /////////////////////////////////////////
@@ -93,18 +101,20 @@ export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.
 
 export type UserOptionalDefaultsRelations = {
   profile?: ProfileOptionalDefaultsWithRelations | null;
-  Job: JobOptionalDefaultsWithRelations[];
-  Department: DepartmentOptionalDefaultsWithRelations[];
+  job: JobOptionalDefaultsWithRelations[];
+  departments: DepartmentOptionalDefaultsWithRelations[];
   shortListed: ShortListedOptionalDefaultsWithRelations[];
+  ownedResumes: ResumeOptionalDefaultsWithRelations[];
 };
 
 export type UserOptionalDefaultsWithRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserOptionalDefaultsRelations
 
 export const UserOptionalDefaultsWithRelationsSchema: z.ZodType<UserOptionalDefaultsWithRelations> = UserOptionalDefaultsSchema.merge(z.object({
   profile: z.lazy(() => ProfileOptionalDefaultsWithRelationsSchema).nullish(),
-  Job: z.lazy(() => JobOptionalDefaultsWithRelationsSchema).array(),
-  Department: z.lazy(() => DepartmentOptionalDefaultsWithRelationsSchema).array(),
+  job: z.lazy(() => JobOptionalDefaultsWithRelationsSchema).array(),
+  departments: z.lazy(() => DepartmentOptionalDefaultsWithRelationsSchema).array(),
   shortListed: z.lazy(() => ShortListedOptionalDefaultsWithRelationsSchema).array(),
+  ownedResumes: z.lazy(() => ResumeOptionalDefaultsWithRelationsSchema).array(),
 }))
 
 /////////////////////////////////////////
@@ -113,36 +123,40 @@ export const UserOptionalDefaultsWithRelationsSchema: z.ZodType<UserOptionalDefa
 
 export type UserPartialRelations = {
   profile?: ProfilePartialWithRelations | null;
-  Job?: JobPartialWithRelations[];
-  Department?: DepartmentPartialWithRelations[];
+  job?: JobPartialWithRelations[];
+  departments?: DepartmentPartialWithRelations[];
   shortListed?: ShortListedPartialWithRelations[];
+  ownedResumes?: ResumePartialWithRelations[];
 };
 
 export type UserPartialWithRelations = z.infer<typeof UserPartialSchema> & UserPartialRelations
 
 export const UserPartialWithRelationsSchema: z.ZodType<UserPartialWithRelations> = UserPartialSchema.merge(z.object({
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
-  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
-  Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
+  job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  departments: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
   shortListed: z.lazy(() => ShortListedPartialWithRelationsSchema).array(),
+  ownedResumes: z.lazy(() => ResumePartialWithRelationsSchema).array(),
 })).partial()
 
 export type UserOptionalDefaultsWithPartialRelations = z.infer<typeof UserOptionalDefaultsSchema> & UserPartialRelations
 
 export const UserOptionalDefaultsWithPartialRelationsSchema: z.ZodType<UserOptionalDefaultsWithPartialRelations> = UserOptionalDefaultsSchema.merge(z.object({
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
-  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
-  Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
+  job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  departments: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
   shortListed: z.lazy(() => ShortListedPartialWithRelationsSchema).array(),
+  ownedResumes: z.lazy(() => ResumePartialWithRelationsSchema).array(),
 }).partial())
 
 export type UserWithPartialRelations = z.infer<typeof UserSchema> & UserPartialRelations
 
 export const UserWithPartialRelationsSchema: z.ZodType<UserWithPartialRelations> = UserSchema.merge(z.object({
   profile: z.lazy(() => ProfilePartialWithRelationsSchema).nullish(),
-  Job: z.lazy(() => JobPartialWithRelationsSchema).array(),
-  Department: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
+  job: z.lazy(() => JobPartialWithRelationsSchema).array(),
+  departments: z.lazy(() => DepartmentPartialWithRelationsSchema).array(),
   shortListed: z.lazy(() => ShortListedPartialWithRelationsSchema).array(),
+  ownedResumes: z.lazy(() => ResumePartialWithRelationsSchema).array(),
 }).partial())
 
 export default UserSchema;

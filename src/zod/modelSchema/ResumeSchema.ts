@@ -5,12 +5,18 @@ import type { CandidateOptionalDefaultsWithRelations } from './CandidateSchema'
 import type { JobsAndResumesWithRelations } from './JobsAndResumesSchema'
 import type { JobsAndResumesPartialWithRelations } from './JobsAndResumesSchema'
 import type { JobsAndResumesOptionalDefaultsWithRelations } from './JobsAndResumesSchema'
+import type { UserWithRelations } from './UserSchema'
+import type { UserPartialWithRelations } from './UserSchema'
+import type { UserOptionalDefaultsWithRelations } from './UserSchema'
 import { CandidateWithRelationsSchema } from './CandidateSchema'
 import { CandidatePartialWithRelationsSchema } from './CandidateSchema'
 import { CandidateOptionalDefaultsWithRelationsSchema } from './CandidateSchema'
 import { JobsAndResumesWithRelationsSchema } from './JobsAndResumesSchema'
 import { JobsAndResumesPartialWithRelationsSchema } from './JobsAndResumesSchema'
 import { JobsAndResumesOptionalDefaultsWithRelationsSchema } from './JobsAndResumesSchema'
+import { UserWithRelationsSchema } from './UserSchema'
+import { UserPartialWithRelationsSchema } from './UserSchema'
+import { UserOptionalDefaultsWithRelationsSchema } from './UserSchema'
 
 /////////////////////////////////////////
 // RESUME SCHEMA
@@ -23,6 +29,7 @@ export const ResumeSchema = z.object({
   fullPath: z.string().nullish(),
   url: z.string().url({message:"URL is invalid"}),
   candidateId: z.string().nullish(),
+  createdById: z.string().nullish(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
@@ -56,6 +63,7 @@ export type ResumeOptionalDefaults = z.infer<typeof ResumeOptionalDefaultsSchema
 export type ResumeRelations = {
   candidate?: CandidateWithRelations | null;
   jobs: JobsAndResumesWithRelations[];
+  createdBy?: UserWithRelations | null;
 };
 
 export type ResumeWithRelations = z.infer<typeof ResumeSchema> & ResumeRelations
@@ -63,6 +71,7 @@ export type ResumeWithRelations = z.infer<typeof ResumeSchema> & ResumeRelations
 export const ResumeWithRelationsSchema: z.ZodType<ResumeWithRelations> = ResumeSchema.merge(z.object({
   candidate: z.lazy(() => CandidateWithRelationsSchema).nullish(),
   jobs: z.lazy(() => JobsAndResumesWithRelationsSchema).array(),
+  createdBy: z.lazy(() => UserWithRelationsSchema).nullish(),
 }))
 
 /////////////////////////////////////////
@@ -72,6 +81,7 @@ export const ResumeWithRelationsSchema: z.ZodType<ResumeWithRelations> = ResumeS
 export type ResumeOptionalDefaultsRelations = {
   candidate?: CandidateOptionalDefaultsWithRelations | null;
   jobs: JobsAndResumesOptionalDefaultsWithRelations[];
+  createdBy?: UserOptionalDefaultsWithRelations | null;
 };
 
 export type ResumeOptionalDefaultsWithRelations = z.infer<typeof ResumeOptionalDefaultsSchema> & ResumeOptionalDefaultsRelations
@@ -79,6 +89,7 @@ export type ResumeOptionalDefaultsWithRelations = z.infer<typeof ResumeOptionalD
 export const ResumeOptionalDefaultsWithRelationsSchema: z.ZodType<ResumeOptionalDefaultsWithRelations> = ResumeOptionalDefaultsSchema.merge(z.object({
   candidate: z.lazy(() => CandidateOptionalDefaultsWithRelationsSchema).nullish(),
   jobs: z.lazy(() => JobsAndResumesOptionalDefaultsWithRelationsSchema).array(),
+  createdBy: z.lazy(() => UserOptionalDefaultsWithRelationsSchema).nullish(),
 }))
 
 /////////////////////////////////////////
@@ -88,6 +99,7 @@ export const ResumeOptionalDefaultsWithRelationsSchema: z.ZodType<ResumeOptional
 export type ResumePartialRelations = {
   candidate?: CandidatePartialWithRelations | null;
   jobs?: JobsAndResumesPartialWithRelations[];
+  createdBy?: UserPartialWithRelations | null;
 };
 
 export type ResumePartialWithRelations = z.infer<typeof ResumePartialSchema> & ResumePartialRelations
@@ -95,6 +107,7 @@ export type ResumePartialWithRelations = z.infer<typeof ResumePartialSchema> & R
 export const ResumePartialWithRelationsSchema: z.ZodType<ResumePartialWithRelations> = ResumePartialSchema.merge(z.object({
   candidate: z.lazy(() => CandidatePartialWithRelationsSchema).nullish(),
   jobs: z.lazy(() => JobsAndResumesPartialWithRelationsSchema).array(),
+  createdBy: z.lazy(() => UserPartialWithRelationsSchema).nullish(),
 })).partial()
 
 export type ResumeOptionalDefaultsWithPartialRelations = z.infer<typeof ResumeOptionalDefaultsSchema> & ResumePartialRelations
@@ -102,6 +115,7 @@ export type ResumeOptionalDefaultsWithPartialRelations = z.infer<typeof ResumeOp
 export const ResumeOptionalDefaultsWithPartialRelationsSchema: z.ZodType<ResumeOptionalDefaultsWithPartialRelations> = ResumeOptionalDefaultsSchema.merge(z.object({
   candidate: z.lazy(() => CandidatePartialWithRelationsSchema).nullish(),
   jobs: z.lazy(() => JobsAndResumesPartialWithRelationsSchema).array(),
+  createdBy: z.lazy(() => UserPartialWithRelationsSchema).nullish(),
 }).partial())
 
 export type ResumeWithPartialRelations = z.infer<typeof ResumeSchema> & ResumePartialRelations
@@ -109,6 +123,7 @@ export type ResumeWithPartialRelations = z.infer<typeof ResumeSchema> & ResumePa
 export const ResumeWithPartialRelationsSchema: z.ZodType<ResumeWithPartialRelations> = ResumeSchema.merge(z.object({
   candidate: z.lazy(() => CandidatePartialWithRelationsSchema).nullish(),
   jobs: z.lazy(() => JobsAndResumesPartialWithRelationsSchema).array(),
+  createdBy: z.lazy(() => UserPartialWithRelationsSchema).nullish(),
 }).partial())
 
 export default ResumeSchema;

@@ -45,10 +45,10 @@ export const CandidateSchema = z.object({
   pros: JsonValueSchema,
   cons: JsonValueSchema,
   score: z.number().positive({message:"Score must be a valid number"}).nullish(),
+  resumeId: z.string(),
   activeResumeId: z.string().nullish(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  resumeId: z.string(),
 })
 
 export type Candidate = z.infer<typeof CandidateSchema>

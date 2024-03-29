@@ -34,36 +34,43 @@ model User {
     emailVerified Boolean?      @default(false)
     phoneVerified Boolean?      @default(false)
     profile       Profile?
-    Job           Job[]
-    Department    Department[]
+    job           Job[]
+    departments   Department[]
     shortListed   ShortListed[]
+    ownedResumes  Resume[]
     createdAt     DateTime      @default(now())
     updatedAt     DateTime      @updatedAt
+
+    @@index([name, email, phone])
+    @@map("user")
 }
 
 model Profile {
     id        String   @id @default(uuid())
-    firstName String /// @zod.string.min(3, {message: "Value cannot be empty"})
-    lastName  String? /// @zod.string.min(3, {message: "Value cannot be empty"})
-    address   String? /// @zod.string.min(3, {message: "Value cannot be empty"})
-    city      String? /// @zod.string.min(3, {message: "Value cannot be empty"})
-    state     String? /// @zod.string.min(3, {message: "Value cannot be empty"})
-    country   String? /// @zod.string.min(3, {message: "Value cannot be empty"})
+    firstName String   @db.VarChar(256) /// @zod.string.min(3, {message: "Value cannot be empty"})
+    lastName  String?  @db.VarChar(256) /// @zod.string.min(3, {message: "Value cannot be empty"})
+    address   String?  @db.VarChar(256) /// @zod.string.min(3, {message: "Value cannot be empty"})
+    city      String?  @db.VarChar(256) /// @zod.string.min(3, {message: "Value cannot be empty"})
+    state     String?  @db.VarChar(256) /// @zod.string.min(3, {message: "Value cannot be empty"})
+    country   String?  @db.VarChar(256) /// @zod.string.min(3, {message: "Value cannot be empty"})
     zipCode   String? /// @zod.string.min(3, {message: "Value cannot be empty"})
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@index([userId])
+    @@map("profile")
 }
 
 model Job {
     id                    String             @id @default(uuid())
-    title                 String /// @zod.string.min(1, {message: "Title cannot be empty"})
-    description           String?
+    title                 String             @db.VarChar(256) /// @zod.string.min(1, {message: "Title cannot be empty"})
+    description           String?            @db.Text
     jobType               JobType?           @default(FULL_TIME)
     department            Department         @relation(fields: [departmentId], references: [id], onDelete: Cascade)
     departmentId          String /// @zod.string.min(1, {message: "Department is required"}).uuid({message:"User ID is invalid"})
-    location              String?
+    location              String?            @db.VarChar()
     shiftType             ShiftType?         @default(DAY)
     expiryDate            DateTime? /// @zod.date({invalid_type_error:"Date is invalid"})
     createdBy             User               @relation(fields: [createdById], references: [id])
@@ -73,18 +80,22 @@ model Job {
     shortListedCandidates ShortListed[]
     createdAt             DateTime           @default(now())
     udpatedAt             DateTime           @updatedAt
+
+    @@map("job")
 }
 
 model Department {
     id          String   @id @default(uuid())
-    title       String /// @zod.string.min(1, {message: "Title cannot be empty"})
-    description String?
+    title       String   @db.VarChar(256) /// @zod.string.min(1, {message: "Title cannot be empty"})
+    description String?  @db.Text
     isDeleted   Boolean  @default(false)
-    Job         Job[]
+    job         Job[]
     createdBy   User     @relation(fields: [createdById], references: [id])
     createdById String /// @zod.string.min(1, {message: "User is required"}).uuid({message:"User ID is invalid"})
     createdAt   DateTime @default(now())
     udpatedAt   DateTime @updatedAt
+
+    @@map("department")
 }
 
 model Candidate {
@@ -108,12 +119,15 @@ model Candidate {
     cons               Json?
     score              Int? /// @zod.number.positive({message:"Score must be a valid number"})
     resume             Resume[]
+    resumeId           String
     jobs               CandidatesOnJobs[]
     shortListedJobs    ShortListed[]
     activeResumeId     String?            @unique
     createdAt          DateTime           @default(now())
     updatedAt          DateTime           @updatedAt
-    resumeId           String
+
+    @@index([email])
+    @@map("candidate")
 }
 
 model CandidatesOnJobs {
@@ -127,6 +141,7 @@ model CandidatesOnJobs {
 
     @@unique([id])
     @@unique([candidateId, jobId])
+    @@map("candiate_on_jobs")
 }
 
 model ShortListed {
@@ -142,6 +157,7 @@ model ShortListed {
 
     @@unique([id])
     @@unique([userId, jobId, candidateId])
+    @@map("shortlisted")
 }
 
 model Resume {
@@ -153,8 +169,13 @@ model Resume {
     candidate   Candidate?       @relation(fields: [candidateId], references: [id])
     candidateId String?
     jobs        JobsAndResumes[]
+    createdBy   User?            @relation(fields: [createdById], references: [id])
+    createdById String?
     createdAt   DateTime         @default(now())
     updatedAt   DateTime         @updatedAt
+
+    @@index([fileKey])
+    @@map("resume")
 }
 
 model JobsAndResumes {
@@ -164,6 +185,7 @@ model JobsAndResumes {
     resumeId String
 
     @@unique([jobId, resumeId])
+    @@map("jobs_and_resumes")
 }
 
 enum Gender {
