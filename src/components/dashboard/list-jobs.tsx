@@ -9,17 +9,17 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 interface ListJobProps extends HTMLAttributes<HTMLDivElement> {
-    [x: string]: any;
+    initialJobs: any;
 }
 
 const LoadingSkeleton: FC = () => {
     return Array.from({ length: 8 }, (_, key) => <Skeleton key={key} className="min-h-16 w-full rounded-none border" />);
 };
 
-export const ListJobs: FC<ListJobProps> = ({ ...props }) => {
+export const ListJobs: FC<ListJobProps> = ({ initialJobs: initialData, ...props }) => {
     const params = useSearchParams();
     const jobId = params.get("jobid");
-    const { data: jobs, isFetching, isRefetching } = api.job.getJobs.useQuery();
+    const { data: jobs, isFetching, isRefetching } = api.job.getJobs.useQuery(undefined, { initialData });
     const [query, setQuery] = useState<string | null>(null);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

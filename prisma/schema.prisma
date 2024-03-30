@@ -14,10 +14,10 @@ datasource db {
 generator zod {
     provider                         = "zod-prisma-types"
     output                           = "../src/zod"
-    useMultipleFiles                 = true
+    useMultipleFiles                 = false
     createPartialTypes               = true
     writeNullishInModelTypes         = true
-    createInputTypes                 = false
+    createInputTypes                 = true
     createOptionalDefaultValuesTypes = true
     createRelationValuesTypes        = true
     addIncludeType                   = true
